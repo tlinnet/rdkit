@@ -43,6 +43,9 @@
 #include <GraphMol/Substruct/SubstructMatch.h>
 #include <GraphMol/Descriptors/MolDescriptors.h>
 #include <GraphMol/ChemTransforms/ChemTransforms.h>
+#include <GraphMol/ChemReactions/Reaction.h>
+#include <GraphMol/ChemReactions/ReactionParser.h>
+#include <GraphMol/ChemReactions/ReactionPickler.h>
 #include <DataStructs/BitOps.h>
 #include <DataStructs/SparseIntVect.h>
 #include <boost/integer_traits.hpp>
@@ -104,7 +107,7 @@ freeCROMol(CROMol data) {
 extern "C" CROMol 
 constructROMol(Mol *data) {
   ROMol   *mol = new ROMol();
-        
+
   try {
     ByteA b(data);
     MolPickler::molFromPickle(b, mol);
@@ -1371,3 +1374,144 @@ makeMACCSBFP(CROMol data){
     return NULL;
   }
 }
+
+
+extern "C" CReaction
+parseReactionText(char *data,bool asSmarts,bool warnOnFail) {
+  ChemicalReaction   *rxn = NULL;
+
+  try {
+    StringData.assign(data);
+    rxn = RxnSmartsToChemicalReaction(StringData,0,!asSmarts);
+  } catch (...) {
+    rxn=NULL;
+  }
+  if(rxn==NULL){
+    if(warnOnFail){
+      ereport(WARNING,
+              (errcode(ERRCODE_WARNING),
+               errmsg("could not create reaction from input '%s'",data)));
+    } else {
+      ereport(ERROR,
+              (errcode(ERRCODE_DATA_EXCEPTION),
+               errmsg("could not create reaction from input '%s'",data)));
+    }
+  }
+    
+  return (CReaction)rxn;
+}
+extern "C" CReaction
+parseReactionBlob(char *data,int len) {
+  ChemicalReaction   *rxn = NULL;
+
+  try {
+    StringData.assign(data,len);
+    rxn = new ChemicalReaction(StringData);
+  } catch (...) {
+    ereport(ERROR,
+            (errcode(ERRCODE_DATA_EXCEPTION),
+             errmsg("problem generating molecule from blob data")));
+  }
+  if(rxn==NULL){
+    ereport(ERROR,
+            (errcode(ERRCODE_DATA_EXCEPTION),
+             errmsg("blob data could not be parsed")));
+  }
+
+  return (CReaction)rxn;
+}
+
+extern "C" CReaction
+constructReaction(Reaction *data) {
+  ChemicalReaction   *rxn;
+        
+  try {
+    std::string pkl(VARDATA(data),VARSIZE(data)-VARHDRSZ);
+    rxn = new ChemicalReaction(pkl);
+  } catch (...) {
+    elog(ERROR, "constructReaction: Unknown exception");
+  }
+        
+  return (CReaction)rxn;     
+}
+
+extern "C" Reaction* 
+deconstructReaction(CReaction data) {
+  ChemicalReaction   *rxn = (ChemicalReaction*)data;
+  ByteA   b;
+
+  try {
+    ReactionPickler::pickleReaction(*rxn, b);
+  } catch (ReactionPicklerException& e) {
+    elog(ERROR, "pickleReaction: %s", e.message());
+  } catch (...) {
+    elog(ERROR, "deconstructReaction: Unknown exception");
+  }
+
+  return (Reaction*)b.toByteA();
+}
+
+extern "C" char *
+makeReactionBlob(CReaction data, int *len){
+  ChemicalReaction   *rxn = (ChemicalReaction*)data;
+  StringData.clear();
+  try {
+    ReactionPickler::pickleReaction(*rxn,StringData);
+  } catch (...) {
+    elog(ERROR, "makeReactionBlob: Unknown exception");
+  }       
+
+  *len = StringData.size();
+  return (char*)StringData.data();               
+}
+
+extern "C" char *
+makeReactionText(CReaction data, int *len,bool asSmarts) {
+  ChemicalReaction   *mol = (ChemicalReaction *)data;
+
+  try {
+    //if(!asSmarts){
+    //  StringData = MolToSmiles(*mol, true);
+    //} else {
+    StringData = ChemicalReactionToRxnSmarts(*mol);
+  } catch (...) {
+    ereport(WARNING,
+            (errcode(ERRCODE_WARNING),
+             errmsg("makeReactionText: problems converting reaction to SMILES/SMARTS")));
+    StringData="";
+  }       
+
+  *len = StringData.size();
+  return (char*)StringData.c_str();               
+}
+
+
+extern "C"  void    
+freeCReaction(CReaction data) {
+  ChemicalReaction   *rxn = (ChemicalReaction*)data;
+  delete rxn;
+}
+
+extern "C" bytea* 
+makeReactionSign(CReaction data) {
+  ChemicalReaction   *mol = (ChemicalReaction *)data;
+  ExplicitBitVect *res=NULL;
+  bytea                   *ret = NULL;
+
+  try {
+    //res = RDKit::PatternFingerprintMol(*mol,getSubstructFpSize());
+    res = new ExplicitBitVect(2*getSubstructFpSize());
+    if(res){
+      std::string sres=BitVectToBinaryText(*res);
+      ret = makeSignatureBitmapFingerPrint((MolBitmapFingerPrint)&sres);
+      delete res;
+      res=0;
+    }
+  } catch (...) {
+    elog(ERROR, "makeReactionSign: Unknown exception");
+    if(res) delete res;
+  }
+        
+  return ret;
+}
+

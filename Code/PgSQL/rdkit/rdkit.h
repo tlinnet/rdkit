@@ -48,6 +48,17 @@ extern "C" {
 #define PG_GETARG_MOL_P_COPY(x) DatumGetMolPCopy(PG_GETARG_DATUM(x))
 #define PG_RETURN_MOL_P(x)      PG_RETURN_DATUM(MolPGetDatum(x))
 
+
+  typedef bytea Reaction;
+#define DatumGetReactionP(x)         ((Reaction*)PG_DETOAST_DATUM(x))
+#define DatumGetReactionPCopy(x)     ((Reaction*)PG_DETOAST_DATUM_COPY(x))
+#define ReactionPGetDatum(x)         (PointerGetDatum(x))
+
+#define PG_GETARG_REACTION_P(x)      DatumGetReactionP(PG_GETARG_DATUM(x))
+#define PG_GETARG_REACTION_P_COPY(x) DatumGetReactionPCopy(PG_GETARG_DATUM(x))
+#define PG_RETURN_REACTION_P(x)      PG_RETURN_DATUM(ReactionPGetDatum(x))
+
+  
   typedef bytea BitmapFingerPrint;
 
 #define DatumGetBitmapFingerPrintP(x)           ((BitmapFingerPrint*)PG_DETOAST_DATUM(x))
@@ -104,12 +115,27 @@ extern "C" {
   bool isValidCTAB(char *data);
   bool isValidMolBlob(char *data,int len);
 
+
+  /* RDKit::ChemicalReaction */
+  typedef void * CReaction; 
+  void    freeCReaction(CReaction data);
+
+  CReaction constructReaction(Reaction* data); 
+  Reaction * deconstructReaction(CReaction data); 
+
+  CReaction parseReactionText(char *data,bool asSmarts,bool warnOnFail);
+  CReaction parseReactionBlob(char *data,int len);
+  char *makeReactionBlob(CReaction data, int *len);
+  char *makeReactionText(CReaction data, int *len,bool asSmarts);
+
+
   int molcmp(CROMol i, CROMol a);
 
   int MolSubstruct(CROMol i, CROMol a);
   int MolSubstructCount(CROMol i, CROMol a,bool uniquify);
 
   bytea *makeMolSign(CROMol data);
+  bytea *makeReactionSign(CReaction data);
 
   double MolAMW(CROMol i);
   double MolLogP(CROMol i);
@@ -238,6 +264,8 @@ extern "C" {
   struct MemoryContextData; /* forward declaration to prevent conflicts with C++ */
   void* SearchMolCache( void *cache, struct MemoryContextData * ctx, Datum a, 
                         Mol **m, CROMol *mol, bytea **sign);
+  void* SearchReactionCache( void *cache, struct MemoryContextData * ctx, Datum a, 
+                        Reaction **m, CReaction *mol, bytea **sign);
   void* SearchBitmapFPCache( void *cache, struct MemoryContextData * ctx, Datum a, 
                              BitmapFingerPrint **f, MolBitmapFingerPrint *fp, bytea **val);
   void* SearchSparseFPCache( void *cache, struct MemoryContextData * ctx, Datum a, 

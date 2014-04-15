@@ -40,6 +40,7 @@
  */
 
 typedef enum EntryKind {
+  ReactionKind,
   MolKind,
   BitmapFpKind,
   SparseFpKind
@@ -50,6 +51,10 @@ typedef struct ValueCacheEntry {
   EntryKind               kind;
 
   union {
+    struct {
+      Reaction                             *value;
+      CReaction                  rxn;
+    } rxn;
     struct {
       Mol                             *value;
       CROMol                  mol;
@@ -138,6 +143,10 @@ cleanupData(ValueCacheEntry *entry)
   pfree( DatumGetPointer(entry->toastedValue) );
   switch(entry->kind) 
     {
+    case ReactionKind:
+      if (entry->detoasted.rxn.value) pfree( entry->detoasted.rxn.value );
+      if (entry->detoasted.rxn.rxn) freeCReaction( entry->detoasted.rxn.rxn );
+      break;
     case MolKind:
       if (entry->detoasted.mol.value) pfree( entry->detoasted.mol.value );
       if (entry->detoasted.mol.mol) freeCROMol( entry->detoasted.mol.mol );
@@ -344,6 +353,42 @@ fetchData(ValueCache *ac, ValueCacheEntry *entry,
         
   switch(entry->kind) 
     {
+    case ReactionKind:
+      if (detoasted) 
+        {
+          if (entry->detoasted.rxn.value == NULL)
+            {
+              Reaction *detoastedMol;
+
+              detoastedMol = DatumGetReactionP(entry->toastedValue);
+              entry->detoasted.rxn.value = MemoryContextAlloc( ac->ctx, VARSIZE(detoastedMol));
+              memcpy( entry->detoasted.rxn.value, detoastedMol, VARSIZE(detoastedMol));
+            }
+          *detoasted = entry->detoasted.rxn.value;
+        }
+
+      if (internal)
+        {
+          if (entry->detoasted.rxn.rxn == NULL)
+            {
+              fetchData(ac, entry, &_tmp, NULL, NULL);
+              entry->detoasted.rxn.rxn = constructReaction(entry->detoasted.rxn.value);
+            }
+          *internal = entry->detoasted.rxn.rxn;
+        }
+
+      if (sign)
+        {
+          if (entry->sign == NULL)
+            {
+              fetchData(ac, entry, NULL, &_tmp, NULL);
+              old = MemoryContextSwitchTo( ac->ctx );
+              entry->sign = makeReactionSign(entry->detoasted.rxn.rxn);
+              MemoryContextSwitchTo(old);
+            }
+          *sign = entry->sign;
+        }
+      break;
     case MolKind:
       if (detoasted) 
         {
@@ -549,6 +594,15 @@ SearchMolCache(void *cache, struct MemoryContextData * ctx, Datum a,
   return  SearchValueCache( 
                            cache, ctx, 
                            /*  input: */ a, MolKind, 
+                           /* output: */ (void**)m, (void**)mol, (void**)val);
+}
+void* 
+SearchReactionCache(void *cache, struct MemoryContextData * ctx, Datum a, 
+                    Reaction **m, CReaction *mol, bytea ** val)
+{
+  return  SearchValueCache( 
+                           cache, ctx, 
+                           /*  input: */ a, ReactionKind, 
                            /* output: */ (void**)m, (void**)mol, (void**)val);
 }
 

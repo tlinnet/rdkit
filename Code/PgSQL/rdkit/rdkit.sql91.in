@@ -62,6 +62,39 @@ CREATE TYPE qmol (
         STORAGE = extended
 );
 
+
+
+CREATE OR REPLACE FUNCTION reaction_recv(internal)
+RETURNS reaction
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION reaction_send(reaction)
+RETURNS bytea
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION reaction_in(cstring)
+RETURNS reaction
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION reaction_out(reaction)
+RETURNS cstring
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE TYPE reaction (
+        INTERNALLENGTH = -1,
+        INPUT = reaction_in,
+        OUTPUT = reaction_out,
+        RECEIVE = reaction_recv,
+        SEND = reaction_send,
+        STORAGE = extended
+);
+
+
+
 CREATE OR REPLACE FUNCTION is_valid_smiles(cstring)
 RETURNS bool
 AS 'MODULE_PATHNAME'

@@ -391,3 +391,82 @@ rdkit_version(PG_FUNCTION_ARGS) {
   PG_RETURN_TEXT_P(cstring_to_text(buf));
 }
 
+
+PG_FUNCTION_INFO_V1(reaction_in);
+Datum           reaction_in(PG_FUNCTION_ARGS);
+Datum
+reaction_in(PG_FUNCTION_ARGS) {
+  char    *data = PG_GETARG_CSTRING(0);
+  CReaction  rxn;
+  Reaction     *res;
+
+  rxn = parseReactionText(data,true,false);
+  if(!rxn){
+    ereport(ERROR,
+            (errcode(ERRCODE_DATA_EXCEPTION),
+             errmsg("could not construct reaction")));
+  }
+
+  res = deconstructReaction(rxn);
+  freeCReaction(rxn);
+
+  PG_RETURN_REACTION_P(res);           
+}
+
+PG_FUNCTION_INFO_V1(reaction_recv);
+Datum           reaction_recv(PG_FUNCTION_ARGS);
+Datum
+reaction_recv(PG_FUNCTION_ARGS) {
+  bytea    *data = PG_GETARG_BYTEA_P(0);
+  int len=VARSIZE(data)-VARHDRSZ;
+  CReaction  rxn;
+  Reaction     *res;
+  rxn = parseReactionBlob(VARDATA(data),len);
+  res = deconstructReaction(rxn);
+  freeCReaction(rxn);
+
+  PG_FREE_IF_COPY(data, 0);
+
+  PG_RETURN_REACTION_P(res);           
+}
+
+
+PG_FUNCTION_INFO_V1(reaction_out);
+Datum           reaction_out(PG_FUNCTION_ARGS);
+Datum
+reaction_out(PG_FUNCTION_ARGS) {
+  CReaction  rxn;
+  char    *str;
+  int     len;
+
+  fcinfo->flinfo->fn_extra = SearchReactionCache(
+                                            fcinfo->flinfo->fn_extra,
+                                            fcinfo->flinfo->fn_mcxt,
+                                            PG_GETARG_DATUM(0),
+                                            NULL, &rxn, NULL);
+  str = makeReactionText(rxn, &len,false);
+
+  PG_RETURN_CSTRING( pnstrdup(str, len) );
+}
+
+PG_FUNCTION_INFO_V1(reaction_send);
+Datum           reaction_send(PG_FUNCTION_ARGS);
+Datum
+reaction_send(PG_FUNCTION_ARGS) {
+  CReaction  rxn;
+  bytea    *res;
+  char *str;
+  int     len;
+
+  fcinfo->flinfo->fn_extra = SearchReactionCache(
+                                            fcinfo->flinfo->fn_extra,
+                                            fcinfo->flinfo->fn_mcxt,
+                                            PG_GETARG_DATUM(0),
+                                            NULL, &rxn, NULL);
+  str = makeReactionBlob(rxn, &len);
+  res=(bytea *)palloc(len+VARHDRSZ);
+  SET_VARSIZE(res,len+VARHDRSZ);
+  memcpy(VARDATA(res),str,len);
+  PG_RETURN_BYTEA_P( res );
+}
+
