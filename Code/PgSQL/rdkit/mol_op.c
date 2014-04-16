@@ -291,3 +291,50 @@ mol_murckoscaffold(PG_FUNCTION_ARGS) {
 
   PG_RETURN_MOL_P(res);           
 }
+
+/*-------------------------------
+
+   REACTIONS
+
+--------------------------------*/
+
+PG_FUNCTION_INFO_V1(is_mol_reactant);
+Datum           is_mol_reactant(PG_FUNCTION_ARGS);
+Datum
+is_mol_reactant(PG_FUNCTION_ARGS) {
+  CROMol  m;
+  CReaction r;
+
+  fcinfo->flinfo->fn_extra = SearchMolCache(
+                                            fcinfo->flinfo->fn_extra,
+                                            fcinfo->flinfo->fn_mcxt,
+                                            PG_GETARG_DATUM(0), 
+                                            NULL, &m, NULL);
+  fcinfo->flinfo->fn_extra = SearchReactionCache(
+                                            fcinfo->flinfo->fn_extra,
+                                            fcinfo->flinfo->fn_mcxt,
+                                            PG_GETARG_DATUM(1), 
+                                            NULL, &r, NULL);
+
+  PG_RETURN_BOOL(MolIsReactant(m, r));             
+}
+PG_FUNCTION_INFO_V1(is_mol_product);
+Datum           is_mol_product(PG_FUNCTION_ARGS);
+Datum
+is_mol_product(PG_FUNCTION_ARGS) {
+  CROMol  m;
+  CReaction r;
+
+  fcinfo->flinfo->fn_extra = SearchMolCache(
+                                            fcinfo->flinfo->fn_extra,
+                                            fcinfo->flinfo->fn_mcxt,
+                                            PG_GETARG_DATUM(0), 
+                                            NULL, &m, NULL);
+  fcinfo->flinfo->fn_extra = SearchReactionCache(
+                                            fcinfo->flinfo->fn_extra,
+                                            fcinfo->flinfo->fn_mcxt,
+                                            PG_GETARG_DATUM(1), 
+                                            NULL, &r, NULL);
+
+  PG_RETURN_BOOL(MolIsProduct(m, r));             
+}

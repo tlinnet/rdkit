@@ -1383,6 +1383,7 @@ parseReactionText(char *data,bool asSmarts,bool warnOnFail) {
   try {
     StringData.assign(data);
     rxn = RxnSmartsToChemicalReaction(StringData,0,!asSmarts);
+    rxn->initReactantMatchers();
   } catch (...) {
     rxn=NULL;
   }
@@ -1515,3 +1516,21 @@ makeReactionSign(CReaction data) {
   return ret;
 }
 
+extern "C" int
+MolIsReactant(CROMol m, CReaction r) {
+  ROMol *mm = (ROMol*)m;
+  ChemicalReaction *rr = (ChemicalReaction*)r;
+  if(!rr->isInitialized()){
+    ereport(WARNING,
+            (errcode(ERRCODE_WARNING),
+             errmsg("isreactant: not initialized")));
+  }
+
+  return RDKit::isMoleculeReactantOfReaction(*rr,*mm);
+}
+extern "C" int
+MolIsProduct(CROMol m, CReaction r) {
+  ROMol *mm = (ROMol*)m;
+  ChemicalReaction *rr = (ChemicalReaction*)r;
+  return RDKit::isMoleculeProductOfReaction(*rr,*mm);
+}

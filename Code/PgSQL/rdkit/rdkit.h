@@ -123,19 +123,12 @@ extern "C" {
   CReaction constructReaction(Reaction* data); 
   Reaction * deconstructReaction(CReaction data); 
 
-  CReaction parseReactionText(char *data,bool asSmarts,bool warnOnFail);
-  CReaction parseReactionBlob(char *data,int len);
-  char *makeReactionBlob(CReaction data, int *len);
-  char *makeReactionText(CReaction data, int *len,bool asSmarts);
-
-
   int molcmp(CROMol i, CROMol a);
 
   int MolSubstruct(CROMol i, CROMol a);
   int MolSubstructCount(CROMol i, CROMol a,bool uniquify);
 
   bytea *makeMolSign(CROMol data);
-  bytea *makeReactionSign(CReaction data);
 
   double MolAMW(CROMol i);
   double MolLogP(CROMol i);
@@ -270,6 +263,22 @@ extern "C" {
                              BitmapFingerPrint **f, MolBitmapFingerPrint *fp, bytea **val);
   void* SearchSparseFPCache( void *cache, struct MemoryContextData * ctx, Datum a, 
                              SparseFingerPrint **f, MolSparseFingerPrint *fp, bytea **val);
+
+  /*-------------------------------
+
+    REACTIONS
+
+  --------------------------------*/
+  CReaction parseReactionText(char *data,bool asSmarts,bool warnOnFail);
+  CReaction parseReactionBlob(char *data,int len);
+  char *makeReactionBlob(CReaction data, int *len);
+  char *makeReactionText(CReaction data, int *len,bool asSmarts);
+  int MolIsReactant(CROMol m, CReaction r);
+  int MolIsProduct(CROMol m, CReaction r);
+
+
+  bytea *makeReactionSign(CReaction data);
+
 
 #ifdef __cplusplus
 }

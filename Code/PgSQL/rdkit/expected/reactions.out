@@ -1,0 +1,36 @@
+select 'c1ccccc1C>>c1ccccn1'::reaction;
+                          reaction                          
+------------------------------------------------------------
+ c1:,-c:,-c:,-c:,-c:,-c:,-1-,:C>>c1:,-c:,-c:,-c:,-c:,-n:,-1
+(1 row)
+
+select is_mol_reactant('c1ccccc1'::mol,'c1ccccc1>>c1ccccn1'::reaction);
+ is_mol_reactant 
+-----------------
+ t
+(1 row)
+
+select is_mol_reactant('c1ccncc1'::mol,'c1ccccc1>>c1ccccn1'::reaction);
+ is_mol_reactant 
+-----------------
+ f
+(1 row)
+
+select is_mol_product('c1ccncc1'::mol,'c1ccccc1>>c1ccccn1'::reaction);
+ is_mol_product 
+----------------
+ t
+(1 row)
+
+select is_mol_product('c1ccccc1'::mol,'c1ccccc1>>c1ccccn1'::reaction);
+ is_mol_product 
+----------------
+ f
+(1 row)
+
+select is_mol_product('c1ccncc1N'::mol,'c1ccccc1>>c1ccccn1'::reaction);
+ is_mol_product 
+----------------
+ t
+(1 row)
+

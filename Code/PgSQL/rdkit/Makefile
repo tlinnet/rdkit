@@ -43,7 +43,7 @@ all: $(EXTENSION)--$(EXTVERSION).sql
 $(EXTENSION)--$(EXTVERSION).sql: $(EXTENSION).sql91.in
 	cp $< $@
 
-REGRESS    = rdkit-91 props btree molgist bfpgist-91 sfpgist slfpgist fps ${INCHIREGRESS}
+REGRESS    = rdkit-91 props btree molgist bfpgist-91 sfpgist slfpgist fps reactions ${INCHIREGRESS} 
 DATA = $(EXTENSION)--$(EXTVERSION).sql
 EXTRA_CLEAN = $(EXTENSION)--$(EXTVERSION).sql
 else
