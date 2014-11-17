@@ -1,3 +1,25 @@
+******  Release_2015.03.1 *******
+(Changes relative to Release_2014.09.1)
+
+Acknowledgements:
+
+Bug Fixes:
+
+New Features:
+ 
+New Database Cartridge Features: 
+
+New Java Wrapper Features:
+
+Deprecated modules (to be removed in next release):
+
+Removed modules:
+
+Contrib updates:
+
+Other:
+
+
 ******  Release_2014.09.1 *******
 (Changes relative to Release_2014.03.1)
 
@@ -105,6 +127,7 @@ New Features:
 
  
 New Database Cartridge Features: 
+- *NOTE:* the configuration variable rdkit.ss_fp_size has been renamed to rdkit.sss_fp_size
 - Chemical reactions and several operations on them are now supported
 - Avalon fingerprints now supported (when support has been compiled in)
 
@@ -115,6 +138,16 @@ New Java Wrapper Features:
 - Possible core leak in some of the MolSuppliers was fixed
 
 Deprecated modules (to be removed in next release):
+- Projects/SDView4
+- rdkit/utils/
+  - GUIDs.py
+  - GenLicense.py
+  - Licensing.py
+  - PiddleTools.py
+  - PilTools.py
+  - REFile.py
+  - SliceTools.py
+- rdkit/Logger
 
 Removed modules:
 

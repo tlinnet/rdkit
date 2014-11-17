@@ -50,8 +50,8 @@ set(RDK_PYTHON_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/rdkit")
 
 #-------
 # Config variables:
-set(RDKit_Year "2014")
-set(RDKit_Month "09")
+set(RDKit_Year "2015")
+set(RDKit_Month "03")
 set(RDKit_Revision "1pre")
 set(RDKit_ABI "1")
 
@@ -106,6 +106,9 @@ if(RDK_BUILD_PYTHON_WRAPPERS)
   #-------
   # pull in python:
   find_package(PythonInterp)
+  if (PYTHONINTERP_FOUND AND NOT Python_ADDITIONAL_VERSIONS)
+    set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+  endif (PYTHONINTERP_FOUND AND NOT Python_ADDITIONAL_VERSIONS)
   find_package(PythonLibs)
   if(CMAKE_MAJOR_VERSION EQUAL 2 AND CMAKE_MINOR_VERSION EQUAL 6)
     include_directories(${PYTHON_INCLUDE_PATH})
