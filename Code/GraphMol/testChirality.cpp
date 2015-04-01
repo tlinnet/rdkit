@@ -2044,7 +2044,26 @@ void testGithub90(){
   BOOST_LOG(rdInfoLog) << "done" << std::endl;
 }
 
+void testGithub435(){
+  BOOST_LOG(rdInfoLog) << "-------------------------------------" << std::endl;
+  BOOST_LOG(rdInfoLog) << "Testing github issue 435: Bad handling of double bond stereochemistry in rings"<<std::endl;
 
+  {
+    std::string smi="C/C1=C(\\[13CH3])/C=C\\C(\\F)=C(\\F)/C=C\\1";
+    ROMol *m = SmilesToMol(smi);
+    TEST_ASSERT(m);
+    std::string smi1=MolToSmiles(*m,true);
+    delete m;
+    m = SmilesToMol(smi1);
+    TEST_ASSERT(m);
+    std::string smi2=MolToSmiles(*m,true);
+    std::cerr<<smi1<<std::endl;
+    std::cerr<<smi2<<std::endl;
+    TEST_ASSERT(smi1==smi2);
+  }
+
+  BOOST_LOG(rdInfoLog) << "done" << std::endl;
+}
 
 int main(){
   RDLog::InitLogs();
@@ -2069,6 +2088,7 @@ int main(){
   testGithub87();
 #endif
   testGithub90();
+  testGithub435();
   return 0;
 }
 
