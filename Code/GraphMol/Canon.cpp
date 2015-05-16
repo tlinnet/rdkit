@@ -582,7 +582,7 @@ namespace Canon {
     // ---------------------
     if(atomRingClosures[atomIdx].size()){
       std::vector<unsigned int> ringsClosed;
-      BOOST_FOREACH(int bIdx,atomRingClosures[atomIdx]){
+      for(auto bIdx : atomRingClosures[atomIdx]){
         travList.push_back(bIdx);
         Bond *bond = mol.getBondWithIdx(bIdx);
         seenFromHere.set(bond->getOtherAtomIdx(atomIdx));
@@ -610,7 +610,7 @@ namespace Canon {
           molStack.push_back(MolStackElem(lowestRingIdx));
         }
       }
-      BOOST_FOREACH(unsigned int ringIdx,ringsClosed){
+      for(auto ringIdx : ringsClosed){
         cyclesAvailable[ringIdx]=1;
       }
     }
@@ -1010,7 +1010,7 @@ namespace Canon {
               ringStereoChemAdjusted.set(msI->obj.atom->getIdx());
             }
             const INT_VECT &ringStereoAtoms=msI->obj.atom->getProp<INT_VECT>(common_properties::_ringStereoAtoms);
-            BOOST_FOREACH(int nbrV,ringStereoAtoms){
+            for(auto nbrV : ringStereoAtoms){
               int nbrIdx=abs(nbrV)-1;
               //Adjust the chiraliy flag of the ring stereo atoms according to the first one
               if(!ringStereoChemAdjusted[nbrIdx] &&

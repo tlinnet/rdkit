@@ -217,7 +217,7 @@ namespace RDKit{
           // can the atom be "hypervalent"?  (was github #447)
           const INT_VECT &valens = PeriodicTable::getTable()->getValenceList((*ai)->getAtomicNum());
           if(valens.size()>1){
-            BOOST_FOREACH(int val,valens){
+            for(auto val : valens){
               if(val - totalValence + chg >= 0){
                 numRadicals = val - totalValence + chg;
                 break;

@@ -12,8 +12,6 @@
 #include <RDGeneral/Exceptions.h>
 #include <GraphMol/AtomIterators.h>
 #include <GraphMol/BondIterators.h>
-#include <boost/foreach.hpp>
-
 
 namespace RDKit {
   namespace MolOps {
@@ -46,7 +44,7 @@ namespace RDKit {
         INT_VECT nAtoms;
         if(nAtom->getPropIfPresent(common_properties::_ringStereoAtoms, nAtoms)){
           // FIX: ought to be able to avoid this copy.
-          BOOST_FOREACH(int &val,nAtoms){
+          for(auto& val : nAtoms){
             if(val<0){
               val=-1*(revOrder[(-val-1)]+1);
             } else {
@@ -66,7 +64,7 @@ namespace RDKit {
         nBond->setEndAtomIdx(revOrder[oBond->getEndAtomIdx()]);
         res->addBond(nBond,true);
         // take care of atom-numbering-dependent properties:
-        BOOST_FOREACH(int &idx,nBond->getStereoAtoms()){
+        for(auto& idx : nBond->getStereoAtoms()){
           idx=revOrder[idx];
         }
       }
