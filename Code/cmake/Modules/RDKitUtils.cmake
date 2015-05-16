@@ -61,6 +61,13 @@ macro(rdkit_library)
                         ARCHIVE_OUTPUT_DIRECTORY ${RDK_ARCHIVE_OUTPUT_DIRECTORY}
                         RUNTIME_OUTPUT_DIRECTORY ${RDK_RUNTIME_OUTPUT_DIRECTORY}
                         LIBRARY_OUTPUT_DIRECTORY ${RDK_LIBRARY_OUTPUT_DIRECTORY})
+
+  set_property(TARGET ${RDKLIB_NAME} PROPERTY CXX_STANDARD 11)
+  set_property(TARGET ${RDKLIB_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+  if(RDK_INSTALL_STATIC_LIBS)
+    set_property(TARGET ${RDKLIB_NAME}_static PROPERTY CXX_STANDARD 11)
+    set_property(TARGET ${RDKLIB_NAME}_static PROPERTY CXX_STANDARD_REQUIRED ON)
+  endif()
 endmacro(rdkit_library)
   
 macro(rdkit_headers)
@@ -100,6 +107,10 @@ endif(WIN32)
 
     INSTALL(TARGETS ${RDKPY_NAME} 
             LIBRARY DESTINATION ${RDKit_PythonDir}/${RDKPY_DEST})
+
+  set_property(TARGET ${RDKPY_NAME} PROPERTY CXX_STANDARD 11)
+  set_property(TARGET ${RDKPY_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+
   endif(RDK_BUILD_PYTHON_WRAPPERS)
 endmacro(rdkit_python_extension)
 
@@ -114,6 +125,8 @@ macro(rdkit_test)
     add_executable(${RDKTEST_NAME} ${RDKTEST_SOURCES})
     target_link_libraries(${RDKTEST_NAME} ${RDKTEST_LINK_LIBRARIES})
     add_test(${RDKTEST_NAME} ${EXECUTABLE_OUTPUT_PATH}/${RDKTEST_NAME})
+    set_property(TARGET ${RDKTEST_NAME} PROPERTY CXX_STANDARD 11)
+    set_property(TARGET ${RDKTEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
   endif(RDK_BUILD_CPP_TESTS)
 endmacro(rdkit_test)
 
