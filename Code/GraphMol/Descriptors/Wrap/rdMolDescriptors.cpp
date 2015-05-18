@@ -12,7 +12,6 @@
 #include <GraphMol/Atom.h>
 #include <GraphMol/GraphMol.h>
 #include <numpy/arrayobject.h>
-#include <boost/foreach.hpp>
 
 #include <GraphMol/Descriptors/MolDescriptors.h>
 #include <GraphMol/Fingerprints/AtomPairs.h>
@@ -423,7 +422,7 @@ namespace {
     std::vector<boost::uint32_t> invars(mol.getNumAtoms());
     RDKit::MorganFingerprints::getConnectivityInvariants(mol,invars,includeRingMembership);
     python::list res;
-    BOOST_FOREACH(boost::uint32_t iv,invars){
+    for( auto iv : invars ){
       res.append(python::long_(iv));
     }
     return res;
@@ -432,7 +431,7 @@ namespace {
     std::vector<boost::uint32_t> invars(mol.getNumAtoms());
     RDKit::MorganFingerprints::getFeatureInvariants(mol,invars);
     python::list res;
-    BOOST_FOREACH(boost::uint32_t iv,invars){
+    for( auto iv : invars ){
       res.append(python::long_(iv));
     }
     return res;
@@ -455,7 +454,7 @@ namespace {
     res=RDKit::Descriptors::calcSlogP_VSA(mol,lbins,force);
 
     python::list pyres;
-    BOOST_FOREACH(double dv,res){
+    for( auto dv : res ){
       pyres.append(dv);
     }
     return pyres;
@@ -477,7 +476,7 @@ namespace {
     res=RDKit::Descriptors::calcSMR_VSA(mol,lbins,force);
 
     python::list pyres;
-    BOOST_FOREACH(double dv,res){
+    for( auto dv : res ){
       pyres.append(dv);
     }
     return pyres;
@@ -499,7 +498,7 @@ namespace {
     res=RDKit::Descriptors::calcPEOE_VSA(mol,lbins,force);
 
     python::list pyres;
-    BOOST_FOREACH(double dv,res){
+    for(auto dv : res ){
       pyres.append(dv);
     }
     return pyres;
@@ -510,7 +509,7 @@ namespace {
     res=RDKit::Descriptors::calcMQNs(mol,force);
 
     python::list pyres;
-    BOOST_FOREACH(unsigned int iv,res){
+    for( auto iv : res ){
       pyres.append(iv);
     }
     return pyres;
