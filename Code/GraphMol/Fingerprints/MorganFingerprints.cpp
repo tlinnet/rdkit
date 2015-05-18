@@ -43,7 +43,6 @@
 #include <boost/dynamic_bitset.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
-#include <boost/foreach.hpp>
 #include <algorithm>
 
 #include <boost/flyweight.hpp>
@@ -215,7 +214,7 @@ $([N;H0&+0]([C;!$(C(=O))])([C;!$(C(=O))])[C;!$(C(=O))])]", // Basic
 
       boost::dynamic_bitset<> includeAtoms(nAtoms);
       if(fromAtoms){
-        BOOST_FOREACH(uint32_t idx,*fromAtoms){
+        for( auto idx : *fromAtoms ){
           includeAtoms.set(idx,1);
         }
       } else {
@@ -246,7 +245,7 @@ $([N;H0&+0]([C;!$(C(=O))])([C;!$(C(=O))])[C;!$(C(=O))])]", // Basic
         std::vector< boost::dynamic_bitset<> > roundAtomNeighborhoods=atomNeighborhoods;
         std::vector< AccumTuple > neighborhoodsThisRound;
           
-        BOOST_FOREACH(unsigned int atomIdx,atomOrder){
+        for( auto atomIdx : atomOrder ){
           if(!deadAtoms[atomIdx]){
             std::vector< std::pair<int32_t,uint32_t> > nbrs;
             ROMol::OEDGE_ITER beg,end;

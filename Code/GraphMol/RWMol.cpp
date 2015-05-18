@@ -9,8 +9,6 @@
 //  of the RDKit source tree.
 //
 
-#include <boost/foreach.hpp>
-
 // our stuff
 #include <RDGeneral/Invariant.h>
 #include <RDGeneral/RDLog.h>
@@ -165,7 +163,7 @@ namespace RDKit{
     }
 
     // do the same with the coordinates in the conformations
-    BOOST_FOREACH(CONFORMER_SPTR conf,d_confs){
+    for(auto conf : d_confs){
       RDGeom::POINT3D_VECT &positions = conf->getPositions();
       RDGeom::POINT3D_VECT_I pi = positions.begin();
       for (unsigned int i = 0; i < getNumAtoms()-1;i++) {

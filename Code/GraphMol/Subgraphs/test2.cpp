@@ -14,8 +14,6 @@
 #include <GraphMol/SmilesParse/SmartsWrite.h>
 #include <GraphMol/Subgraphs/Subgraphs.h>
 #include <GraphMol/Subgraphs/SubgraphUtils.h>
-#include <boost/foreach.hpp>
-
 
 #include <iostream>
 using namespace std;
@@ -32,7 +30,7 @@ void test1()
     PATH_LIST sgs;
     sgs = findAllSubgraphsOfLengthN(*mol,3,false,0);
     TEST_ASSERT(sgs.size()==3);
-    BOOST_FOREACH(PATH_TYPE tmp,sgs){
+    for( const auto& tmp : sgs ){
       TEST_ASSERT(tmp[0]==0);
       TEST_ASSERT(tmp.size()==3);
       ROMol *frag=Subgraphs::pathToSubmol(*mol,tmp,false);

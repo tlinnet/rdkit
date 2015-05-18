@@ -32,7 +32,6 @@
 
 #include <GraphMol/ChemReactions/Reaction.h>
 #include <GraphMol/Depictor/RDDepictor.h>
-#include <boost/foreach.hpp>
 
 namespace RDDepict {
   void compute2DCoordsForReaction(RDKit::ChemicalReaction &rxn,
@@ -54,11 +53,11 @@ namespace RDDepict {
       compute2DCoords(**templIt,0,canonOrient,true,nFlipsPerSample,
                       nSamples,sampleSeed,permuteDeg4Nodes);
       double minX=100.,maxX=-100.;
-      BOOST_FOREACH(RDGeom::Point3D &pt,(*templIt)->getConformer().getPositions()){
+      for( auto& pt : (*templIt)->getConformer().getPositions()){
         minX=std::min(pt.x,minX);
       }
       xOffset += minX;
-      BOOST_FOREACH(RDGeom::Point3D &pt,(*templIt)->getConformer().getPositions()){
+      for( auto& pt : (*templIt)->getConformer().getPositions()){
         pt.x += xOffset;
         maxX=std::max(pt.x,maxX);
       }
@@ -74,11 +73,11 @@ namespace RDDepict {
       compute2DCoords(**templIt,0,canonOrient,true,nFlipsPerSample,
                       nSamples,sampleSeed,permuteDeg4Nodes);
       double minX=100.,maxX=-100.;
-      BOOST_FOREACH(RDGeom::Point3D &pt,(*templIt)->getConformer().getPositions()){
+      for( auto& pt : (*templIt)->getConformer().getPositions()){
         minX=std::min(pt.x,minX);
       }
       xOffset += minX;
-      BOOST_FOREACH(RDGeom::Point3D &pt,(*templIt)->getConformer().getPositions()){
+      for( auto& pt : (*templIt)->getConformer().getPositions()){
         pt.x += xOffset;
         maxX=std::max(pt.x,maxX);
       }

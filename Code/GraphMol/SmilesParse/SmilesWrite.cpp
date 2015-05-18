@@ -14,7 +14,6 @@
 #include <GraphMol/Canon.h>
 #include <GraphMol/new_canon.h>
 #include <boost/lexical_cast.hpp>
-#include <boost/foreach.hpp>
 #include <boost/dynamic_bitset.hpp>
 #include <sstream>
 #include <map>
@@ -264,11 +263,11 @@ namespace RDKit{
       Canon::canonicalizeFragment(mol,atomIdx,colors,ranks,
                                   molStack,bondsInPlay,bondSymbols,doIsomericSmiles);
       Bond *bond=0;
-      BOOST_FOREACH(Canon::MolStackElem mSE,molStack){
+      for( const auto& mSE : molStack ){
         switch(mSE.type){
         case Canon::MOL_STACK_ATOM:
           if(!ringClosuresToErase.empty()){
-            BOOST_FOREACH(unsigned int rclosure,ringClosuresToErase){
+            for( auto rclosure : ringClosuresToErase){
               ringClosureMap.erase(rclosure);
             }
             ringClosuresToErase.clear();
@@ -482,17 +481,17 @@ namespace RDKit{
     std::string res;
 
     boost::dynamic_bitset<> atomsInPlay(mol.getNumAtoms(),0);
-    BOOST_FOREACH(int aidx,atomsToUse){
+    for( auto aidx : atomsToUse ){
       atomsInPlay.set(aidx);
     }
     // figure out which bonds are actually in play:
     boost::dynamic_bitset<> bondsInPlay(mol.getNumBonds(),0);
     if(bondsToUse){
-      BOOST_FOREACH(int bidx,*bondsToUse){
+      for( auto bidx : *bondsToUse ){
         bondsInPlay.set(bidx);
       }
     } else {
-      BOOST_FOREACH(int aidx,atomsToUse){
+      for( auto aidx : atomsToUse ){
         ROMol::OEDGE_ITER beg,end;
         boost::tie(beg,end) = mol.getAtomBonds(mol.getAtomWithIdx(aidx));
         while(beg!=end){
@@ -513,14 +512,14 @@ namespace RDKit{
         const INT_VECT &aring=mol.getRingInfo()->atomRings()[ridx];
         const INT_VECT &bring=mol.getRingInfo()->bondRings()[ridx];
         bool keepIt=true;
-        BOOST_FOREACH(int aidx,aring){
+        for( auto aidx : aring ){
           if(!atomsInPlay[aidx]){
             keepIt=false;
             break;
           }
         }
         if(keepIt){
-          BOOST_FOREACH(int bidx,bring){
+          for( auto bidx : bring ){
             if(!bondsInPlay[bidx]){
               keepIt=false;
               break;
@@ -550,7 +549,7 @@ namespace RDKit{
       } else {
         tmol.setProp(common_properties::_StereochemDone,1);
         // we need the CIP codes:
-        BOOST_FOREACH(int aidx,atomsToUse){
+        for( auto aidx : atomsToUse ){
           const Atom *oAt=mol.getAtomWithIdx(aidx);
           std::string cipCode;
           if(oAt->getPropIfPresent(common_properties::_CIPCode, cipCode)){
@@ -574,7 +573,7 @@ namespace RDKit{
 #endif
 
     std::vector<Canon::AtomColors> colors(tmol.getNumAtoms(),Canon::BLACK_NODE);
-    BOOST_FOREACH(int aidx,atomsToUse){
+    for( auto aidx : atomsToUse ){
       colors[aidx]=Canon::WHITE_NODE;
     }
     std::vector<Canon::AtomColors>::iterator colorIt;
@@ -590,7 +589,7 @@ namespace RDKit{
         rootedAtAtom=-1;
       } else {
         int nextRank = tmol.getNumAtoms()+1;
-        BOOST_FOREACH(int i,atomsToUse){
+        for(auto i : atomsToUse ){
           if( colors[i] == Canon::WHITE_NODE && ranks[i] < nextRank ){
             nextRank = ranks[i];
             nextAtomIdx = i;

@@ -34,7 +34,6 @@
 #include <GraphMol/Substruct/SubstructMatch.h>
 #include <GraphMol/QueryOps.h>
 #include <boost/dynamic_bitset.hpp>
-#include <boost/foreach.hpp>
 #include <map>
 #include <algorithm>
 #include <GraphMol/ChemTransforms/ChemTransforms.h>
@@ -80,11 +79,11 @@ namespace RDKit {
         //   where we should give all matches and cases where we shouldn't; it's safer to just
         //   produce everything and let the client deal with uniquifying their results.
         int matchCount=SubstructMatch(*(reactants[i]),*iter->get(), matchesHere, false, true, false);
-        BOOST_FOREACH(const MatchVectType &match, matchesHere){
+        for( const auto& match : matchesHere){
           bool keep=true;
           int pIdx,mIdx;
-          BOOST_FOREACH(boost::tie(pIdx,mIdx),match){
-            if(reactants[i]->getAtomWithIdx(mIdx)->hasProp(common_properties::_protected)){
+          for( const auto& pr : match){
+            if(reactants[i]->getAtomWithIdx(pr.second)->hasProp(common_properties::_protected)){
               keep=false;
               break;
             }
@@ -728,7 +727,7 @@ namespace RDKit {
       // if any of the reactants have a conformer, we'll go ahead and
       // generate conformers for the products:
       bool doConfs=false;
-      BOOST_FOREACH(ROMOL_SPTR reactant,reactants){
+      for( auto reactant : reactants){
         if(reactant->getNumConformers()){
           doConfs=true;
           break;
@@ -773,7 +772,7 @@ namespace RDKit {
     if(reactants.size() != rxn.getNumReactantTemplates()){
       throw ChemicalReactionException("Number of reactants provided does not match number of reactant templates.");
     }
-    BOOST_FOREACH(ROMOL_SPTR msptr,reactants){
+    for( auto msptr : reactants){
       CHECK_INVARIANT(msptr,"bad molecule in reactants");
       msptr->clearAllAtomBookmarks(); // we use this as scratch space
     }

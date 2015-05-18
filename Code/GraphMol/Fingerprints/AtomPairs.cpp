@@ -16,7 +16,6 @@
 #include <RDGeneral/hash/hash.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/dynamic_bitset.hpp>
-#include <boost/foreach.hpp>
 
 namespace RDKit{
   namespace AtomPairs {
@@ -169,7 +168,7 @@ namespace RDKit{
             setAtomPairBit(i,j,nAtoms,atomCodes,dm,res,minLength,maxLength,includeChirality);
           }
         } else {
-          BOOST_FOREACH(boost::uint32_t j,*fromAtoms){
+          for( auto j : *fromAtoms){
             if(j!=i){
               if(ignoreAtoms &&
                  std::find(ignoreAtoms->begin(),ignoreAtoms->end(),j)!=ignoreAtoms->end()){
@@ -241,7 +240,7 @@ namespace RDKit{
             }
           }
         } else {
-          BOOST_FOREACH(boost::uint32_t j,*fromAtoms){
+          for( auto j : *fromAtoms){
             if(j!=i){
               if(ignoreAtoms &&
                  std::find(ignoreAtoms->begin(),ignoreAtoms->end(),j)!=ignoreAtoms->end()){
@@ -283,13 +282,13 @@ namespace RDKit{
                                                                        use2D,confId);
       ExplicitBitVect *res=new ExplicitBitVect(nBits);
       if(nBitsPerEntry!=4){
-        BOOST_FOREACH(SparseIntVect<boost::int64_t>::StorageType::value_type val,sres->getNonzeroElements()){
+        for( const auto& val : sres->getNonzeroElements()){
           for(unsigned int i=0;i<nBitsPerEntry;++i){
             if(val.second>static_cast<int>(i) ) res->setBit(val.first*nBitsPerEntry+i);
           }        
         }
       } else {
-        BOOST_FOREACH(SparseIntVect<boost::int64_t>::StorageType::value_type val,sres->getNonzeroElements()){
+        for(const auto& val : sres->getNonzeroElements()){
           for(unsigned int i=0;i<nBitsPerEntry;++i){
             if(val.second>=bounds[i]){
               res->setBit(val.first*nBitsPerEntry+i);
@@ -393,14 +392,14 @@ namespace RDKit{
       boost::dynamic_bitset<> *fromAtomsBV=0;
       if(fromAtoms){
         fromAtomsBV = new boost::dynamic_bitset<>(mol.getNumAtoms());
-        BOOST_FOREACH(boost::uint32_t fAt,*fromAtoms){
+        for( auto fAt : *fromAtoms){
           fromAtomsBV->set(fAt);
         }
       }
       boost::dynamic_bitset<> *ignoreAtomsBV=0;
       if(ignoreAtoms){
         ignoreAtomsBV = new boost::dynamic_bitset<>(mol.getNumAtoms());
-        BOOST_FOREACH(boost::uint32_t fAt,*ignoreAtoms){
+        for( auto fAt : *ignoreAtoms){
           ignoreAtomsBV->set(fAt);
         }
       }
@@ -421,12 +420,12 @@ namespace RDKit{
           }
         }
         if(keepIt && ignoreAtomsBV){
-          BOOST_FOREACH(int pElem,path){
+          for( auto pElem : path ){
             if(ignoreAtomsBV->test(pElem)){
               keepIt=false;
               break;
             }
-          }
+         }
         }
         if(keepIt){
           for(unsigned int i=0;i<targetSize;++i){
@@ -474,26 +473,24 @@ namespace RDKit{
         boost::dynamic_bitset<> *fromAtomsBV=0;
         if(fromAtoms){
           fromAtomsBV = new boost::dynamic_bitset<>(mol.getNumAtoms());
-          BOOST_FOREACH(boost::uint32_t fAt,*fromAtoms){
+          for( auto fAt : *fromAtoms ){
             fromAtomsBV->set(fAt);
           }
         }
         boost::dynamic_bitset<> *ignoreAtomsBV=0;
         if(ignoreAtoms){
           ignoreAtomsBV = new boost::dynamic_bitset<>(mol.getNumAtoms());
-          BOOST_FOREACH(boost::uint32_t fAt,*ignoreAtoms){
+          for( auto fAt : *ignoreAtoms ){
             ignoreAtomsBV->set(fAt);
           }
         }
         
         PATH_LIST paths=findAllPathsOfLengthN(mol,targetSize,false);
-        for(PATH_LIST::const_iterator pathIt=paths.begin();
-            pathIt!=paths.end();++pathIt){
+        for(const auto& path : paths){
           bool keepIt=true;
           if(fromAtomsBV){
             keepIt=false;
           }
-          const PATH_TYPE &path=*pathIt;
           if(fromAtomsBV){
             if(fromAtomsBV->test(static_cast<boost::uint32_t>(path.front())) ||
                fromAtomsBV->test(static_cast<boost::uint32_t>(path.back()))){
@@ -501,7 +498,7 @@ namespace RDKit{
             }
           }
           if(keepIt && ignoreAtomsBV){
-            BOOST_FOREACH(int pElem,path){
+            for( auto pElem : path ){
               if(ignoreAtomsBV->test(pElem)){
                 keepIt=false;
                 break;
@@ -557,13 +554,13 @@ namespace RDKit{
       ExplicitBitVect *res=new ExplicitBitVect(nBits);
 
       if(nBitsPerEntry!=4){
-        BOOST_FOREACH(SparseIntVect<boost::int64_t>::StorageType::value_type val,sres->getNonzeroElements()){
+        for(const auto& val : sres->getNonzeroElements()){
           for(unsigned int i=0;i<nBitsPerEntry;++i){
             if(val.second>static_cast<int>(i)) res->setBit(val.first*nBitsPerEntry+i);
           }        
         }
       } else {
-        BOOST_FOREACH(SparseIntVect<boost::int64_t>::StorageType::value_type val,sres->getNonzeroElements()){
+        for(const auto& val : sres->getNonzeroElements()){
           for(unsigned int i=0;i<nBitsPerEntry;++i){
             if(val.second>=bounds[i]){
               res->setBit(val.first*nBitsPerEntry+i);

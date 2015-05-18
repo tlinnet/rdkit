@@ -15,7 +15,6 @@
 #include <list>
 #include <algorithm>
 #include <boost/dynamic_bitset.hpp>
-#include <boost/foreach.hpp>
 #include <RDGeneral/RDLog.h>
 
 namespace SmilesParseOps{
@@ -74,7 +73,7 @@ namespace SmilesParseOps{
         atomIt!=frag->endAtoms();atomIt++){
       INT_VECT tmpVect;
       if((*atomIt)->getPropIfPresent(common_properties::_RingClosures, tmpVect)){
-        BOOST_FOREACH(int &v, tmpVect){
+        for( auto& v : tmpVect ){
           // if the ring closure is not already a bond, don't touch it:
           if(v>=0) v += nOrigBonds;
         }
@@ -97,7 +96,7 @@ namespace SmilesParseOps{
       if(frag->hasBondBookmark(ci_LEADING_BOND)){
         //std::cout << "found it" << std::endl;
         const ROMol::BOND_PTR_LIST &leadingBonds=frag->getAllBondsWithBookmark(ci_LEADING_BOND);
-        BOOST_FOREACH(Bond *leadingBond,leadingBonds){
+        for( auto leadingBond : leadingBonds ){
           // we've already got a bond, so just set its local info
           // and then add it to the molecule intact (no sense doing
           // any extra work).
@@ -274,7 +273,7 @@ namespace SmilesParseOps{
           } else {
             // we are not going to add the atom itself, but we will push on
             // ring closure bonds at this point (if required):
-            BOOST_FOREACH(int closure,ringClosures){
+            for( auto closure : ringClosures ){
               bondOrdering.push_back(closure);
             }
           }
@@ -465,7 +464,7 @@ namespace SmilesParseOps{
         int mark=bookmarkIt->first;
         bookmarkIt++;
         RWMol::ATOM_PTR_LIST::const_iterator aplci;
-        BOOST_FOREACH(Atom *atom,bookmarkedAtomsToRemove){
+        for( auto atom : bookmarkedAtomsToRemove){
           mol->clearAtomBookmark(mark,atom);
         }
       } else {

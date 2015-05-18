@@ -28,7 +28,6 @@
 #include <RDGeneral/RDLog.h>
 #include <RDGeneral/Invariant.h>
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <list>
 
@@ -167,7 +166,7 @@ namespace RDKit{
       BOOST_LOG(rdErrorLog) << nm<<" Parse Error: "<< e.message() << " for input: "<< origInp << std::endl;
       res = 0;
     }
-    BOOST_FOREACH(RDKit::RWMol *molPtr,molVect){
+    for( auto molPtr : molVect ){
       if (molPtr) {
         // Clean-up the bond bookmarks when not calling CloseMolRings
         SmilesParseOps::CleanupAfterParseError(molPtr);

@@ -209,7 +209,7 @@ namespace RDKit{
     
     ExplicitBitVect *res = new ExplicitBitVect(fpSize);
     unsigned int pIdx=0;
-    BOOST_FOREACH(const ROMol *patt,patts){
+    for( const auto patt : patts ){
       ++pIdx;
       std::vector<MatchVectType> matches;
       // uniquify matches?
@@ -217,7 +217,7 @@ namespace RDKit{
       //   time for 10K molecules w/o uniquify: 4.87s
       SubstructMatch(mol,*patt,matches,false); 
       boost::uint32_t mIdx=pIdx+patt->getNumAtoms()+patt->getNumBonds();
-      BOOST_FOREACH(MatchVectType &mv,matches){
+      for( const auto& mv : matches ){
 #ifdef VERBOSE_FINGERPRINTING
         std::cerr<<"\nPatt: "<<pIdx<<" | ";
 #endif          
@@ -231,7 +231,7 @@ namespace RDKit{
         bool isQuery=false;
         boost::uint32_t bitId=pIdx;
         std::vector<unsigned int> amap(mv.size(),0);
-        BOOST_FOREACH(MatchVectType::value_type &p,mv){
+        for( const auto& p : mv ){
 #ifdef VERBOSE_FINGERPRINTING
           std::cerr<<p.second<<" ";
 #endif

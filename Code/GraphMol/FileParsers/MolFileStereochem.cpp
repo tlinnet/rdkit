@@ -403,7 +403,7 @@ namespace RDKit {
     //   the first bond that is not yet picked by any other chiral centers
     // we use the orders calculated above to determine which order to do the wedging
     INT_MAP_INT res;
-    BOOST_FOREACH(unsigned int idx,indices){
+    for( auto idx : indices){
       const Atom *atom=mol.getAtomWithIdx(idx);
       Atom::ChiralType type = atom->getChiralTag();
       // the indices are ordered such that all chiral atoms come first. If

@@ -15,7 +15,6 @@
 #include <GraphMol/SmilesParse/SmilesParse.h>
 #include <GraphMol/Substruct/SubstructMatch.h>
 #include <boost/dynamic_bitset.hpp>
-#include <boost/foreach.hpp>
 #include <boost/flyweight.hpp>
 #include <boost/flyweight/key_value.hpp>
 #include <boost/flyweight/no_tracking.hpp>
@@ -134,8 +133,8 @@ namespace RDKit{
     const std::string NumHeterocyclesVersion="1.0.0";
     unsigned int calcNumHeterocycles(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->atomRings()){
-        BOOST_FOREACH(int i,iv){
+      for( const auto& iv : mol.getRingInfo()->atomRings()){
+        for( auto i : iv ){
           if(mol.getAtomWithIdx(i)->getAtomicNum()!=6){
             ++res;
             break;
@@ -147,9 +146,9 @@ namespace RDKit{
     const std::string NumAromaticRingsVersion="1.0.0";
     unsigned int calcNumAromaticRings(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
         ++res;
-        BOOST_FOREACH(int i,iv){
+        for( auto i : iv){
           if(!mol.getBondWithIdx(i)->getIsAromatic()){
             --res;
             break;
@@ -161,9 +160,9 @@ namespace RDKit{
     const std::string NumSaturatedRingsVersion="1.0.0";
     unsigned int calcNumSaturatedRings(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
         ++res;
-        BOOST_FOREACH(int i,iv){
+        for( auto i : iv ){
           if(mol.getBondWithIdx(i)->getBondType()!=Bond::SINGLE || mol.getBondWithIdx(i)->getIsAromatic()){
             --res;
             break;
@@ -175,8 +174,8 @@ namespace RDKit{
     const std::string NumAliphaticRingsVersion="1.0.0";
     unsigned int calcNumAliphaticRings(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
-        BOOST_FOREACH(int i,iv){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
+        for( auto i : iv ){
           if(!mol.getBondWithIdx(i)->getIsAromatic()){
             ++res;
             break;
@@ -188,9 +187,9 @@ namespace RDKit{
     const std::string NumAromaticHeterocyclesVersion="1.0.0";
     unsigned int calcNumAromaticHeterocycles(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
         bool countIt=false;
-        BOOST_FOREACH(int i,iv){
+        for( auto i : iv ){
           if(!mol.getBondWithIdx(i)->getIsAromatic()){
             countIt=false;
             break;
@@ -210,9 +209,9 @@ namespace RDKit{
     const std::string NumAromaticCarbocyclesVersion="1.0.0";
     unsigned int calcNumAromaticCarbocycles(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
         bool countIt=true;
-        BOOST_FOREACH(int i,iv){
+        for( auto i : iv ){
           if(!mol.getBondWithIdx(i)->getIsAromatic()){
             countIt=false;
             break;
@@ -232,10 +231,10 @@ namespace RDKit{
     const std::string NumAliphaticHeterocyclesVersion="1.0.0";
     unsigned int calcNumAliphaticHeterocycles(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
         bool hasAliph=false;
         bool hasHetero=false;
-        BOOST_FOREACH(int i,iv){
+        for( auto i : iv ){
           if(!mol.getBondWithIdx(i)->getIsAromatic()){
             hasAliph=true;
           }
@@ -254,10 +253,10 @@ namespace RDKit{
     const std::string NumAliphaticCarbocyclesVersion="1.0.0";
     unsigned int calcNumAliphaticCarbocycles(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
         bool hasAliph=false;
         bool hasHetero=false;
-        BOOST_FOREACH(int i,iv){
+        for( auto i : iv ){
           if(!mol.getBondWithIdx(i)->getIsAromatic()){
             hasAliph=true;
           }
@@ -276,9 +275,9 @@ namespace RDKit{
     const std::string NumSaturatedHeterocyclesVersion="1.0.0";
     unsigned int calcNumSaturatedHeterocycles(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
         bool countIt=false;
-        BOOST_FOREACH(int i,iv){
+        for( auto i : iv ){
           if(mol.getBondWithIdx(i)->getBondType()!=Bond::SINGLE || mol.getBondWithIdx(i)->getIsAromatic()){
             countIt=false;
             break;
@@ -298,9 +297,9 @@ namespace RDKit{
     const std::string NumSaturatedCarbocyclesVersion="1.0.0";
     unsigned int calcNumSaturatedCarbocycles(const ROMol &mol){
       unsigned int res=0;
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->bondRings()){
+      for( const auto& iv : mol.getRingInfo()->bondRings()){
         bool countIt=true;
-        BOOST_FOREACH(int i,iv){
+        for( auto i : iv ){
           if(mol.getBondWithIdx(i)->getBondType()!=Bond::SINGLE || mol.getBondWithIdx(i)->getIsAromatic()){
             countIt=false;
             break;

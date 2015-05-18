@@ -315,7 +315,7 @@ namespace RDKit{
                                              useHs);
       }
     } else {
-      BOOST_FOREACH(boost::uint32_t aidx,*fromAtoms){
+      for( auto aidx : *fromAtoms ){
         INT_PATH_LIST_MAP tPaths;
         if(branchedPaths){
           tPaths = findAllSubgraphsOfLengthsMtoN(mol,minPath,maxPath,
@@ -329,7 +329,7 @@ namespace RDKit{
           
 #ifdef VERBOSE_FINGERPRINTING
           std::cerr<<"paths from "<<aidx<<" size: "<<tpit->first<<std::endl;
-          BOOST_FOREACH(PATH_TYPE path,tpit->second){
+          for( const auto& path : tpit->second ){
             std::cerr<<" path: ";
             std::copy(path.begin(),path.end(),std::ostream_iterator<int>(std::cerr,", "));
             std::cerr<<std::endl;
@@ -380,7 +380,7 @@ namespace RDKit{
 #endif    
     boost::dynamic_bitset<> atomsInPath(mol.getNumAtoms());
     for(INT_PATH_LIST_MAP_CI paths=allPaths.begin();paths!=allPaths.end();paths++){
-      BOOST_FOREACH(const PATH_TYPE &path,paths->second){
+      for(const auto& path : paths->second){
 #ifdef REPORT_FP_STATS
         std::vector<int> atomsToUse;
 #endif
@@ -601,7 +601,7 @@ namespace RDKit{
       for(unsigned int i=0;i<fpSize;++i){
         if((*res)[i] && (bitSmiles[i].size()>1)){
           std::cerr<<i<<"\t"<<bitSmiles[i].size()<<std::endl;
-          BOOST_FOREACH(std::string smi,bitSmiles[i]){
+          for( auto& smi : bitSmiles[i]){
             std::cerr<<"   "<<smi<<std::endl;
           }
         }
@@ -674,7 +674,7 @@ namespace RDKit{
         allPaths = findAllPathsOfLengthsMtoN(mol,minPath,maxPath,false);
       }
     } else {
-      BOOST_FOREACH(boost::uint32_t aidx,*fromAtoms){
+      for(auto aidx : *fromAtoms ){
         INT_PATH_LIST_MAP tPaths;
         if(branchedPaths){
           tPaths = findAllSubgraphsOfLengthsMtoN(mol,minPath,maxPath,
@@ -683,10 +683,9 @@ namespace RDKit{
           tPaths = findAllPathsOfLengthsMtoN(mol,minPath,maxPath,
                                              true,false,aidx);
         }
-        for(INT_PATH_LIST_MAP::const_iterator tpit=tPaths.begin();
-            tpit!=tPaths.end();++tpit){
-          allPaths[tpit->first].insert(allPaths[tpit->first].begin(),
-                                       tpit->second.begin(),tpit->second.end());
+        for(const auto& tp : tPaths){
+          allPaths[tp.first].insert(allPaths[tp.first].begin(),
+                                    tp.second.begin(),tp.second.end());
         }
       }
     }

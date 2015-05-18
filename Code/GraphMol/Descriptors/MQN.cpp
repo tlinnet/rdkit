@@ -12,7 +12,6 @@
 #include <GraphMol/RDKitBase.h>
 #include <GraphMol/Descriptors/MolDescriptors.h>
 #include <GraphMol/Descriptors/Lipinski.h>
-#include <boost/foreach.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -148,7 +147,7 @@ namespace RDKit{
 
       // ---------------------------------------------------
       //  ring size counts
-      BOOST_FOREACH(const INT_VECT &iv,mol.getRingInfo()->atomRings()){
+      for( const auto& iv : mol.getRingInfo()->atomRings()){
         if(iv.size()<10){
           res[iv.size()+29]++;
         } else {

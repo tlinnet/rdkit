@@ -25,7 +25,6 @@
 #include <RDGeneral/RDLog.h>
 #include <string>
 #include <boost/version.hpp>
-#include <boost/foreach.hpp>
 
 using namespace RDKit;
 
@@ -2170,7 +2169,7 @@ void testMACCS(){
     TEST_ASSERT(fp1->getNumOnBits()==15);
     unsigned int _onBits[]={24, 68, 69, 71, 93, 94, 102, 124, 131, 139, 151, 158, 160, 161, 164};
     std::vector<unsigned int> onBits(_onBits,_onBits+sizeof(_onBits)/sizeof(*_onBits));
-    BOOST_FOREACH(unsigned int ob,onBits){
+    for( auto ob : onBits ){
       TEST_ASSERT((*fp1)[ob]);
     }
     delete m1;
@@ -2184,7 +2183,7 @@ void testMACCS(){
     TEST_ASSERT(fp1->getNumOnBits()==5);
     unsigned int _onBits[]={74, 114, 149, 155, 160};
     std::vector<unsigned int> onBits(_onBits,_onBits+sizeof(_onBits)/sizeof(*_onBits));
-    BOOST_FOREACH(unsigned int ob,onBits){
+    for( auto ob : onBits ){
       TEST_ASSERT((*fp1)[ob]);
     }
     delete m1;
@@ -2198,7 +2197,7 @@ void testMACCS(){
     TEST_ASSERT(fp1->getNumOnBits()==8);
     unsigned int _onBits[]={93, 139, 141, 149, 157, 160, 164, 166};
     std::vector<unsigned int> onBits(_onBits,_onBits+sizeof(_onBits)/sizeof(*_onBits));
-    BOOST_FOREACH(unsigned int ob,onBits){
+    for( auto ob : onBits ){
       TEST_ASSERT((*fp1)[ob]);
     }
     delete m1;
@@ -2802,7 +2801,7 @@ void testMultithreadedPatternFP(){
   }
   tg.join_all();
 
-  BOOST_FOREACH(const ROMol *mol,mols){
+  for( const auto mol : mols ){
     ExplicitBitVect *bv=PatternFingerprintMol(*mol,2048);
     referenceData.push_back(bv);
   }

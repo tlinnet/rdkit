@@ -586,7 +586,7 @@ namespace RDKit{
       python::list &pyl=static_cast<python::list &>(atomBits);
       for(unsigned int i=0;i<mol.getNumAtoms();++i){
         python::list tmp;
-        BOOST_FOREACH(boost::uint32_t v,(*lAtomBits)[i]){
+        for( auto v : (*lAtomBits)[i]){
           tmp.append(v);
         }
         pyl.append(tmp);

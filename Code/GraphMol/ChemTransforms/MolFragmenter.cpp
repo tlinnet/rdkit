@@ -29,6 +29,7 @@
 #include <boost/flyweight/no_tracking.hpp>
 #include <boost/functional/hash.hpp>
 #include <sstream>
+#include <boost/range/adaptor/reversed.hpp>
 
 namespace RDKit{
   namespace MolFragmenter{
@@ -335,7 +336,7 @@ namespace RDKit{
       PRECONDITION( ( !bondTypes || bondTypes->size() == bondIndices.size() ), "bad bondType vector");
       PRECONDITION( ( !nCutsPerAtom || nCutsPerAtom->size() == mol.getNumAtoms() ), "bad nCutsPerAtom vector");
       if(nCutsPerAtom){
-        BOOST_FOREACH(unsigned int &nCuts,*nCutsPerAtom){
+        for( auto& nCuts : *nCutsPerAtom){
           nCuts=0;
         }
       }
@@ -344,7 +345,7 @@ namespace RDKit{
 
       std::vector<Bond *> bondsToRemove;
       bondsToRemove.reserve(bondIndices.size());
-      BOOST_FOREACH(unsigned int bondIdx,bondIndices){
+      for( const auto bondIdx : bondIndices){
         bondsToRemove.push_back(res->getBondWithIdx(bondIdx));
       }
       for(unsigned int i=0;i<bondsToRemove.size();++i){
@@ -417,7 +418,7 @@ namespace RDKit{
       boost::dynamic_bitset<> bondsUsed(mol.getNumBonds(),0);
       // the bond definitions are organized (more or less) general -> specific, so loop
       // over them backwards
-      BOOST_REVERSE_FOREACH(const FragmenterBondType &fbt,bondPatterns){
+      for( const auto& fbt : boost::adaptors::reverse(bondPatterns)){
         if(fbt.query->getNumAtoms()!=2 || fbt.query->getNumBonds()!=1){
             BOOST_LOG(rdErrorLog)<<"fragmentation queries must have 2 atoms and 1 bond"<<std::endl;
             continue;
@@ -427,7 +428,7 @@ namespace RDKit{
         //std::cerr<<"  >>> "<<fbt.atom1Label<<" "<<fbt.atom2Label<<std::endl;
         std::vector<MatchVectType> bondMatches;
         SubstructMatch(mol,*fbt.query.get(),bondMatches);
-        BOOST_FOREACH(const MatchVectType &mv,bondMatches){
+        for( const auto& mv : bondMatches){
           const Bond *bond=mol.getBondBetweenAtoms(mv[0].second,mv[1].second);
           //std::cerr<<"          "<<bond->getIdx()<<std::endl;
           TEST_ASSERT(bond);

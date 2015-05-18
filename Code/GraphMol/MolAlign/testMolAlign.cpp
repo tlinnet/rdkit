@@ -601,7 +601,7 @@ void testMMFFO3AMultiThread() {
   }
   tg.join_all();
   
-  BOOST_FOREACH(ROMol *mol,mols){
+  for( auto mol : mols ){
     delete mol;
   }
   BOOST_LOG(rdErrorLog) << "  done" << std::endl;
@@ -663,7 +663,7 @@ void testCrippenO3AMultiThread() {
   }
   tg.join_all();
   
-  BOOST_FOREACH(ROMol *mol,mols){
+  for( auto mol : mols ){
     delete mol;
   }
   BOOST_LOG(rdErrorLog) << "  done" << std::endl;

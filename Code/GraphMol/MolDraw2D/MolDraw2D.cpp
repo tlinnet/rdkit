@@ -15,7 +15,6 @@
 #include <cstdlib>
 #include <limits>
 
-#include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/tuple/tuple_comparison.hpp>
 #include <boost/assign/list_of.hpp>
@@ -139,11 +138,11 @@ namespace RDKit {
       tagAtoms(mol);
     }
     if(drawOptions().atomRegions.size()){
-      BOOST_FOREACH(const std::vector<int> &region, drawOptions().atomRegions){
+      for( const auto& region : drawOptions().atomRegions){
         if(region.size()>1){
           Point2D minv=at_cds_[region[0]];
           Point2D maxv=at_cds_[region[0]];
-          BOOST_FOREACH(int idx,region){
+          for( auto idx : region ){
             const Point2D &pt=at_cds_[idx];
             minv.x = std::min(minv.x,pt.x);
             minv.y = std::min(minv.y,pt.y);
@@ -756,7 +755,7 @@ namespace RDKit {
         continue;
       }
       bool same_ring = false;
-      BOOST_FOREACH( const INT_VECT &ring , mol.getRingInfo()->bondRings() ) {
+      for( const auto& ring : mol.getRingInfo()->bondRings() ) {
         if( find( ring.begin() , ring.end() , bond->getIdx() ) != ring.end() &&
             find( ring.begin() , ring.end() , bond2->getIdx() ) != ring.end() ) {
           same_ring = true;
