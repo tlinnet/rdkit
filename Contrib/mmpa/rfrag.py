@@ -150,7 +150,7 @@ def delete_bonds(smi,id,mol,bonds,out):
             isotope_track = {}
             side_chain_fragments = side_chains.split(".")
 
-            for s in xrange( len(side_chain_fragments) ):
+            for s in range( len(side_chain_fragments) ):
                 matchObj = re.search( '\[\*\:([123])\]', side_chain_fragments[s] )
                 if matchObj:
                     #add to isotope_track with key: old_isotope, value:
