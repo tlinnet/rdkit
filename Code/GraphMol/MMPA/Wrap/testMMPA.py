@@ -80,11 +80,11 @@ class TestCase(unittest.TestCase):
     def test4(self): # currently failing
         m = Chem.MolFromSmiles('Cc1ccccc1NC(=O)C(C)[NH+]1CCCC1') # ZINC00000051
         frags = rdMMPA.FragmentMol(m,resultsAsMols=False)
-        for frag in sorted(frags):
-            print(frag)
+        #for frag in sorted(frags):
+        #    print(frag)
         cores = set(x[0] for x in frags)
         self.assertTrue('C([*:1])([*:2])[*:3]' in cores)
-        self.assertTrue('O=C(N[*:3])C([*:1])[*:2]' in cores)
+        self.assertTrue('O=C(N[*:1])C([*:2])[*:3]' in cores)
         self.assertEqual(len(frags),18)
         for frag in frags:
             self.assertEqual(len(frag),2)        
