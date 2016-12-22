@@ -41,9 +41,8 @@ namespace {
 template<class T>
 T getMaxProp(ChemicalReaction &rxn, const std::string &prop) {
   T max_atom = (T)0;
-  for(auto it = rxn.beginReactantTemplates();
-      it != rxn.endReactantTemplates();
-      ++it) {
+  for (auto it = rxn.beginReactantTemplates(); it != rxn.endReactantTemplates();
+       ++it) {
     for (ROMol::AtomIterator atIt = (*it)->beginAtoms();
          atIt != (*it)->endAtoms();
          ++atIt) {
@@ -56,9 +55,8 @@ T getMaxProp(ChemicalReaction &rxn, const std::string &prop) {
     }
   }
 
-  for(auto it = rxn.beginAgentTemplates();
-      it != rxn.endAgentTemplates();
-      ++it) {
+  for (auto it = rxn.beginAgentTemplates(); it != rxn.endAgentTemplates();
+       ++it) {
     for (ROMol::AtomIterator atIt = (*it)->beginAtoms();
          atIt != (*it)->endAtoms();
          ++atIt) {
@@ -71,9 +69,8 @@ T getMaxProp(ChemicalReaction &rxn, const std::string &prop) {
     }
   }
 
-  for(auto it = rxn.beginProductTemplates();
-      it != rxn.endProductTemplates();
-      ++it) {
+  for (auto it = rxn.beginProductTemplates(); it != rxn.endProductTemplates();
+       ++it) {
     for (ROMol::AtomIterator atIt = (*it)->beginAtoms();
          atIt != (*it)->endAtoms();
          ++atIt) {
@@ -174,9 +171,8 @@ void fixRGroups(ChemicalReaction &rxn) {
   std::vector<AtomInfo> productAtomsToFix;
   
   unsigned int templateIdx = 0;
-  for(auto it = rxn.beginReactantTemplates();
-      it != rxn.endReactantTemplates();
-      ++it, ++templateIdx) {
+  for (auto it = rxn.beginReactantTemplates(); it != rxn.endReactantTemplates();
+       ++it, ++templateIdx) {
     for (ROMol::AtomIterator atIt = (*it)->beginAtoms();
          atIt != (*it)->endAtoms();
          ++atIt) {
@@ -188,9 +184,8 @@ void fixRGroups(ChemicalReaction &rxn) {
   }
   
   templateIdx = 0;
-  for(auto it = rxn.beginProductTemplates();
-      it != rxn.endProductTemplates();
-      ++it, ++templateIdx) {
+  for (auto it = rxn.beginProductTemplates(); it != rxn.endProductTemplates();
+       ++it, ++templateIdx) {
     for (ROMol::AtomIterator atIt = (*it)->beginAtoms();
          atIt != (*it)->endAtoms();
          ++atIt) {
@@ -239,7 +234,7 @@ void fixRGroups(ChemicalReaction &rxn) {
             rat.setAtomMap(max_atom_map + rat.bestGuessRLabel());
             pat.setAtomMap(max_atom_map + rat.bestGuessRLabel());
           }
-          pat.atom = nullptr; // don't match again
+          pat.atom = nullptr;  // don't match again
           break;
         }
       }
@@ -264,9 +259,8 @@ void fixAtomMaps(ChemicalReaction &rxn) {
 
   unsigned int templateIdx = 0;
 
-  for(auto it = rxn.beginReactantTemplates();
-      it != rxn.endReactantTemplates();
-      ++it, ++templateIdx) {
+  for (auto it = rxn.beginReactantTemplates(); it != rxn.endReactantTemplates();
+       ++it, ++templateIdx) {
     for (ROMol::AtomIterator atIt = (*it)->beginAtoms();
          atIt != (*it)->endAtoms();
          ++atIt) {
@@ -287,9 +281,8 @@ void fixAtomMaps(ChemicalReaction &rxn) {
     return; // everything is ok!
 
   templateIdx = 0;
-  for(auto it = rxn.beginProductTemplates();
-      it != rxn.endProductTemplates();
-      ++it, ++templateIdx) {
+  for (auto it = rxn.beginProductTemplates(); it != rxn.endProductTemplates();
+       ++it, ++templateIdx) {
     for (ROMol::AtomIterator atIt = (*it)->beginAtoms();
          atIt != (*it)->endAtoms();
          ++atIt) {
@@ -312,9 +305,8 @@ void fixAtomMaps(ChemicalReaction &rxn) {
 // might throw mol sanitization exception??? wrap in RxnSanitize?
 void fixReactantTemplateAromaticity(ChemicalReaction &rxn) {
   unsigned int ops;
-  for(auto it = rxn.beginReactantTemplates();
-      it != rxn.endReactantTemplates();
-      ++it) {
+  for (auto it = rxn.beginReactantTemplates(); it != rxn.endReactantTemplates();
+       ++it) {
     RWMol * rw = dynamic_cast<RWMol*>(it->get());
     if (rw)
       sanitizeMol(*rw, ops, MolOps::SANITIZE_SETAROMATICITY);
@@ -325,9 +317,8 @@ void fixReactantTemplateAromaticity(ChemicalReaction &rxn) {
 
 void fixHs(ChemicalReaction &rxn) {
   const bool mergeUnmappedOnly = true;
-  for(auto it = rxn.beginReactantTemplates();
-      it != rxn.endReactantTemplates();
-      ++it) {
+  for (auto it = rxn.beginReactantTemplates(); it != rxn.endReactantTemplates();
+       ++it) {
     RWMol * rw = dynamic_cast<RWMol*>(it->get());
     if (rw)
       MolOps::mergeQueryHs(*rw, mergeUnmappedOnly);
@@ -341,10 +332,9 @@ void adjustTemplates(ChemicalReaction &rxn,
   if(!params.adjustDegree && !params.adjustRingCount) {
     return;
   }
-  
-  for(auto it = rxn.beginReactantTemplates();
-      it != rxn.endReactantTemplates();
-      ++it) {
+
+  for (auto it = rxn.beginReactantTemplates(); it != rxn.endReactantTemplates();
+       ++it) {
     RWMol * rw = dynamic_cast<RWMol*>(it->get());
     if (rw)
       adjustQueryProperties(*rw, &params);

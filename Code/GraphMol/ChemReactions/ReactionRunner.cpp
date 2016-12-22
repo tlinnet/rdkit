@@ -134,8 +134,7 @@ void recurseOverReactantCombinations(
   unsigned int nReactants = matchesByReactant.size();
   URANGE_CHECK(level, nReactants - 1);
   PRECONDITION(combination.size() == nReactants, "bad combination size");
-  for (auto reactIt =
-           matchesByReactant[level].begin();
+  for (auto reactIt = matchesByReactant[level].begin();
        reactIt != matchesByReactant[level].end(); ++reactIt) {
     VectMatchVectType prod = combination;
     prod[level] = *reactIt;
@@ -287,9 +286,8 @@ struct ReactantProductAtomMapping {
 ReactantProductAtomMapping *getAtomMappingsReactantProduct(
     const MatchVectType &match, const ROMol &reactantTemplate,
     RWMOL_SPTR product, unsigned numReactAtoms) {
-  auto *mapping =
-      new ReactantProductAtomMapping(numReactAtoms);
-  for (const auto & i : match) {
+  auto *mapping = new ReactantProductAtomMapping(numReactAtoms);
+  for (const auto &i : match) {
     const Atom *templateAtom = reactantTemplate.getAtomWithIdx(i.first);
     int molAtomMapNumber;
     if (templateAtom->getPropIfPresent(common_properties::molAtomMapNumber,
@@ -528,9 +526,8 @@ void addReactantNeighborsToProduct(
           // stack
           const Atom *neighbor = reactant.getAtomWithIdx(*nbrIdx);
           for (unsigned int i : lReactantAtomProductIndex) {
-            addMissingProductAtom(*neighbor, lreactIdx,
-                                  i, product,
-                                  reactant, mapping);
+            addMissingProductAtom(*neighbor, lreactIdx, i, product, reactant,
+                                  mapping);
           }
           // update the stack:
           atomStack.push_back(neighbor);
@@ -739,7 +736,7 @@ void addReactantAtomsAndBonds(const ChemicalReaction &rxn, RWMOL_SPTR product,
   // to find other connected atoms that should be added:
 
   std::vector<const Atom *> chiralAtomsToCheck;
-  for (const auto & matchIdx : match) {
+  for (const auto &matchIdx : match) {
     int reactantAtomIdx = matchIdx.second;
     if (mapping->mappedAtoms[reactantAtomIdx]) {
       CHECK_INVARIANT(mapping->reactProdAtomMap.find(reactantAtomIdx) !=
@@ -940,8 +937,7 @@ int getAtomMapNo(ROMol::ATOM_BOOKMARK_MAP *map, Atom *atom) {
   if (map) {
     for (ROMol::ATOM_BOOKMARK_MAP::const_iterator it = map->begin();
          it != map->end(); ++it) {
-      for (auto ait = it->second.begin();
-           ait != it->second.end(); ++ait) {
+      for (auto ait = it->second.begin(); ait != it->second.end(); ++ait) {
         if (*ait == atom) return it->first;
       }
     }
@@ -1020,12 +1016,9 @@ ROMol *reduceProductToSideChains(const ROMOL_SPTR &product,
         if (addDummyAtoms) {
           // add dummy atom where the reaction scaffold would have been
           unsigned int idx = mol->addAtom();
-          for (auto & i : bonds_to_product) {
-            mol->addBond(idx, i.rAtom->getIdx(),
-                         i.bond_type);
-            int atommapno = i.mapno == -1
-                                ? mapno
-                                : i.mapno;
+          for (auto &i : bonds_to_product) {
+            mol->addBond(idx, i.rAtom->getIdx(), i.bond_type);
+            int atommapno = i.mapno == -1 ? mapno : i.mapno;
 
             if (atommapno) {
               Atom *at = mol->getAtomWithIdx(idx);
@@ -1036,25 +1029,20 @@ ROMol *reduceProductToSideChains(const ROMOL_SPTR &product,
             }
           }
         } else {
-          for (auto & i : bonds_to_product) {
-            int atommapno = i.mapno == -1
-                                ? mapno
-                                : i.mapno;
+          for (auto &i : bonds_to_product) {
+            int atommapno = i.mapno == -1 ? mapno : i.mapno;
             if (mapno != -1) {
               std::vector<int> rgroups;
               std::vector<int> bonds;
-              i.rAtom->getPropIfPresent(
-                  common_properties::_rgroupAtomMaps, rgroups);
-              i.rAtom->getPropIfPresent(
-                  common_properties::_rgroupBonds, bonds);
+              i.rAtom->getPropIfPresent(common_properties::_rgroupAtomMaps,
+                                        rgroups);
+              i.rAtom->getPropIfPresent(common_properties::_rgroupBonds, bonds);
 
               rgroups.push_back(atommapno);
               // XXX THIS MAY NOT BE SAFE
               bonds.push_back(static_cast<int>(i.bond_type));
-              i.rAtom->setProp(
-                  common_properties::_rgroupAtomMaps, rgroups);
-              i.rAtom->setProp(
-                  common_properties::_rgroupBonds, bonds);
+              i.rAtom->setProp(common_properties::_rgroupAtomMaps, rgroups);
+              i.rAtom->setProp(common_properties::_rgroupBonds, bonds);
             }
           }
         }

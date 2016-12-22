@@ -63,10 +63,9 @@ void MolDraw2D::drawMolecule(const ROMol &mol, const std::string &legend,
                              int confId) {
   vector<int> highlight_bonds;
   if (highlight_atoms) {
-    for (auto ai = highlight_atoms->begin();
-         ai != highlight_atoms->end(); ++ai) {
-      for (auto aj = ai + 1;
-           aj != highlight_atoms->end(); ++aj) {
+    for (auto ai = highlight_atoms->begin(); ai != highlight_atoms->end();
+         ++ai) {
+      for (auto aj = ai + 1; aj != highlight_atoms->end(); ++aj) {
         const Bond *bnd = mol.getBondBetweenAtoms(*ai, *aj);
         if (bnd) highlight_bonds.push_back(bnd->getIdx());
       }
@@ -534,7 +533,7 @@ void MolDraw2D::calculateScale(int width, int height) {
   x_min_ = y_min_ = numeric_limits<double>::max();
   double x_max(-numeric_limits<double>::max()),
       y_max(-numeric_limits<double>::max());
-  for (auto & pt : at_cds_[activeMolIdx_]) {
+  for (auto &pt : at_cds_[activeMolIdx_]) {
     x_min_ = std::min(pt.x, x_min_);
     y_min_ = std::min(pt.y, y_min_);
     x_max = std::max(pt.x, x_max);

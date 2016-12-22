@@ -120,8 +120,8 @@ void drawMoleculesHelper2(MolDraw2D &self, python::object pmols,
   rdk_auto_ptr<std::vector<std::string> > legends =
       pythonObjectToVect<std::string>(plegends);
 
-  self.drawMolecules(*mols, legends.get(), nullptr, nullptr, nullptr, nullptr, nullptr,
-                     confIds.get());
+  self.drawMolecules(*mols, legends.get(), nullptr, nullptr, nullptr, nullptr,
+                     nullptr, confIds.get());
 }
 
 #ifdef RDK_CAIRO_BUILD

@@ -2556,8 +2556,7 @@ MMFFMolProperties::getMMFFBondStretchEmpiricalRuleParams(const ROMol &mol,
   PRECONDITION(mmffAtomPropParams[1],
                "property parameters for atom 2 not found");
 
-  auto *mmffBondParams =
-      new ForceFields::MMFF::MMFFBond();
+  auto *mmffBondParams = new ForceFields::MMFF::MMFFBond();
   const double c = (((atomicNum1 == 1) || (atomicNum2 == 1)) ? 0.050 : 0.085);
   const double n = 1.4;
 #if 0
@@ -2689,8 +2688,7 @@ const ForceFields::MMFF::MMFFAngle *getMMFFAngleBendEmpiricalRuleParams(
   atomicNum[0] = mol.getAtomWithIdx(idx1)->getAtomicNum();
   atomicNum[1] = mol.getAtomWithIdx(idx2)->getAtomicNum();
   atomicNum[2] = mol.getAtomWithIdx(idx3)->getAtomicNum();
-  auto *mmffAngleParams =
-      new ForceFields::MMFF::MMFFAngle();
+  auto *mmffAngleParams = new ForceFields::MMFF::MMFFAngle();
   unsigned int ringSize = isAngleInRingOfSize3or4(mol, idx1, idx2, idx3);
   if (!oldMMFFAngleParams) {
     // angle rest value empirical rule

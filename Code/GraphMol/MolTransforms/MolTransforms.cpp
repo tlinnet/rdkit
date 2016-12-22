@@ -104,7 +104,8 @@ RDNumeric::DoubleSymmMatrix *computeCovarianceMatrix(
     const Conformer &conf, const RDGeom::Point3D &center, bool normalize,
     bool ignoreHs) {
   double xx, xy, xz, yy, yz, zz;
-  computeCovarianceTerms(conf,center,xx,xy,xz,yy,yz,zz,normalize,ignoreHs,nullptr);
+  computeCovarianceTerms(conf, center, xx, xy, xz, yy, yz, zz, normalize,
+                         ignoreHs, nullptr);
   auto *res = new RDNumeric::DoubleSymmMatrix(3, 3);
   res->setVal(0, 0, xx);
   res->setVal(0, 1, xy);
@@ -350,7 +351,7 @@ void setBondLength(Conformer &conf, unsigned int iAtomId, unsigned int jAtomId,
   std::list<unsigned int> alist;
   _toBeMovedIdxList(mol, iAtomId, jAtomId, alist);
   v *= (value / origValue - 1.);
-  for (unsigned int & it : alist) {
+  for (unsigned int &it : alist) {
     pos[it] -= v;
   }
 }
@@ -406,7 +407,7 @@ void setAngleRad(Conformer &conf, unsigned int iAtomId, unsigned int jAtomId,
   // get all atoms bonded to j and loop through them
   std::list<unsigned int> alist;
   _toBeMovedIdxList(mol, jAtomId, kAtomId, alist);
-  for (unsigned int & it : alist) {
+  for (unsigned int &it : alist) {
     // translate atom so that it coincides with the origin of rotation
     pos[it] -= rotAxisBegin;
     // rotate around our rotation axis
@@ -495,7 +496,7 @@ void setDihedralRad(Conformer &conf, unsigned int iAtomId, unsigned int jAtomId,
   // get all atoms bonded to k and loop through them
   std::list<unsigned int> alist;
   _toBeMovedIdxList(mol, jAtomId, kAtomId, alist);
-  for (unsigned int & it : alist) {
+  for (unsigned int &it : alist) {
     // translate atom so that it coincides with the origin of rotation
     pos[it] -= rotAxisBegin;
     // rotate around our rotation axis

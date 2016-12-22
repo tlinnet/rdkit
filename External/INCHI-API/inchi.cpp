@@ -363,8 +363,9 @@ bool _Valence4NCleanUp1(RWMol& mol, Atom* atom) {
 bool _Valence4NCleanUp2(RWMol& mol, Atom* atom) {
   std::stack<Bond*> stack;
   std::set<int> _visited;
-  Atom* target = findAlternatingBonds(
-      mol, atom, 7, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 1, nullptr, stack, _visited);
+  Atom* target =
+      findAlternatingBonds(mol, atom, 7, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 1,
+                           nullptr, stack, _visited);
   if (target == nullptr) return false;
 
   stack.top()->setBondType(Bond::SINGLE);
@@ -377,8 +378,9 @@ bool _Valence4NCleanUp2(RWMol& mol, Atom* atom) {
 bool _Valence5NCleanUp1(RWMol& mol, Atom* atom) {
   std::stack<Bond*> stack;
   std::set<int> _visited;
-  Atom* target = findAlternatingBonds(
-      mol, atom, 7, 1, Bond::DOUBLE, Bond::DOUBLE, 0, 5, nullptr, stack, _visited);
+  Atom* target =
+      findAlternatingBonds(mol, atom, 7, 1, Bond::DOUBLE, Bond::DOUBLE, 0, 5,
+                           nullptr, stack, _visited);
   if (target == nullptr) return false;
   target->setFormalCharge(0);
   target->calcExplicitValence(false);
@@ -421,8 +423,9 @@ bool _Valence5NCleanUp2(RWMol& mol, Atom* atom) {
 bool _Valence5NCleanUp3(RWMol& mol, Atom* atom) {
   std::stack<Bond*> stack;
   std::set<int> _visited;
-  Atom* target = findAlternatingBonds(
-      mol, atom, 7, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 1, nullptr, stack, _visited);
+  Atom* target =
+      findAlternatingBonds(mol, atom, 7, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 1,
+                           nullptr, stack, _visited);
   if (target == nullptr) return false;
 
   target->setFormalCharge(-1);
@@ -629,8 +632,9 @@ bool _Valence5NCleanUp7(RWMol& mol, Atom* atom) {
   // is it connected to O via alternating bonds?
   std::stack<Bond*> stack;
   std::set<int> _visited;
-  Atom* target = findAlternatingBonds(
-      mol, atom, 8, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 5, nullptr, stack, _visited);
+  Atom* target =
+      findAlternatingBonds(mol, atom, 8, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 5,
+                           nullptr, stack, _visited);
   if (target == nullptr) return false;
   // replace the N with Sn
   if (atom->getAtomicNum() != 7 || atom->getFormalCharge() != 0 ||
@@ -853,8 +857,9 @@ bool _Valence5NCleanUpA(RWMol& mol, Atom* atom) {
 bool _Valence5NCleanUpB(RWMol& mol, Atom* atom) {
   std::stack<Bond*> stack;
   std::set<int> _visited;
-  Atom* target = findAlternatingBonds(
-      mol, atom, 6, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 1, nullptr, stack, _visited);
+  Atom* target =
+      findAlternatingBonds(mol, atom, 6, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 1,
+                           nullptr, stack, _visited);
   if (target == nullptr) return false;
 
   target->setFormalCharge(-1);
@@ -925,8 +930,9 @@ bool _Valence7SCleanUp2(RWMol& mol, Atom* atom) {
 
   std::stack<Bond*> stack;
   std::set<int> _visited;
-  Atom* target = findAlternatingBonds(
-      mol, atom, 7, 0, Bond::DOUBLE, Bond::TRIPLE, 0, 3, nullptr, stack, _visited);
+  Atom* target =
+      findAlternatingBonds(mol, atom, 7, 0, Bond::DOUBLE, Bond::TRIPLE, 0, 3,
+                           nullptr, stack, _visited);
   if (target) {
     while (!stack.empty()) {
       Bond* bond = stack.top();
@@ -954,8 +960,9 @@ bool _Valence7SCleanUp3(RWMol& mol, Atom* atom) {
 
   std::stack<Bond*> stack;
   std::set<int> _visited;
-  Atom* target = findAlternatingBonds(
-      mol, atom, 7, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 1, nullptr, stack, _visited);
+  Atom* target =
+      findAlternatingBonds(mol, atom, 7, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 1,
+                           nullptr, stack, _visited);
   if (target) {
     stack.top()->setBondType(Bond::SINGLE);
     target->setFormalCharge(-1);
@@ -975,8 +982,9 @@ bool _Valence8SCleanUp1(RWMol& mol, Atom* atom) {
 
   std::stack<Bond*> stack;
   std::set<int> _visited;
-  Atom* target = findAlternatingBonds(
-      mol, atom, 7, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 9, nullptr, stack, _visited);
+  Atom* target =
+      findAlternatingBonds(mol, atom, 7, 0, Bond::DOUBLE, Bond::DOUBLE, 0, 9,
+                           nullptr, stack, _visited);
 
   if (!target) return false;
 
@@ -1299,7 +1307,7 @@ RWMol* InchiToMol(const std::string& inchi, ExtraInchiReturnValues& rv,
       }
 
       // adding isotopes at the end
-      for (auto & ii : isotopes) {
+      for (auto& ii : isotopes) {
         unsigned int isotope, aid, repeat;
         boost::tie(isotope, aid, repeat) = ii;
         aid = indexToAtomIndexMapping[aid];

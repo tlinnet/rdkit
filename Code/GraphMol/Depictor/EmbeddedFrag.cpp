@@ -1687,7 +1687,7 @@ void EmbeddedFrag::flipAboutBond(unsigned int bondId, bool flipEnd) {
     endSideFlip = false;
   }
 
-  for (auto & d_eatom : d_eatoms) {
+  for (auto &d_eatom : d_eatoms) {
     RDKit::INT_VECT_CI fii = std::find(endSideAids.begin(), endSideAids.end(),
                                        static_cast<int>(d_eatom.first));
     if (endSideFlip ^ (fii == endSideAids.end())) {

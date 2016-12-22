@@ -48,7 +48,7 @@ void CleanupAfterParseError(RWMol *mol) {
   auto markI = marks->begin();
   while (markI != marks->end()) {
     RWMol::BOND_PTR_LIST &bonds = markI->second;
-    for (auto & bond : bonds) {
+    for (auto &bond : bonds) {
       delete bond;
     }
     ++markI;
@@ -287,8 +287,8 @@ void AdjustAtomChiralityFlags(RWMol *mol) {
 
       // copy over the bond ids:
       INT_LIST bondOrdering;
-      for (auto neighborIt = neighbors.begin();
-           neighborIt != neighbors.end(); ++neighborIt) {
+      for (auto neighborIt = neighbors.begin(); neighborIt != neighbors.end();
+           ++neighborIt) {
         if (neighborIt != selfPos) {
           bondOrdering.push_back(neighborIt->second);
         } else {
@@ -491,8 +491,8 @@ void CloseMolRings(RWMol *mol, bool toleratePartials) {
                 "somehow atom doesn't have _RingClosures property.");
             INT_VECT closures;
             atom1->getProp(common_properties::_RingClosures, closures);
-            auto closurePos = std::find(
-                closures.begin(), closures.end(), -(bookmarkIt->first + 1));
+            auto closurePos = std::find(closures.begin(), closures.end(),
+                                        -(bookmarkIt->first + 1));
             CHECK_INVARIANT(closurePos != closures.end(),
                             "could not find bookmark in atom _RingClosures");
             *closurePos = bondIdx - 1;

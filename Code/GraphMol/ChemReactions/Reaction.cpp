@@ -208,8 +208,7 @@ bool ChemicalReaction::validate(unsigned int &numWarnings,
         while (!queries.empty()) {
           const Atom::QUERYATOM_QUERY *query = queries.front();
           queries.pop_front();
-          for (auto qIter =
-                   query->beginChildren();
+          for (auto qIter = query->beginChildren();
                qIter != query->endChildren(); ++qIter) {
             queries.push_back((*qIter).get());
           }
@@ -362,8 +361,8 @@ bool isMoleculeAgentOfReaction(const ChemicalReaction &rxn, const ROMol &mol,
     throw ChemicalReactionException("initMatchers() must be called first");
   }
   which = 0;
-  for (auto iter = rxn.beginAgentTemplates();
-       iter != rxn.endAgentTemplates(); ++iter, ++which) {
+  for (auto iter = rxn.beginAgentTemplates(); iter != rxn.endAgentTemplates();
+       ++iter, ++which) {
     if (iter->get()->getNumHeavyAtoms() != mol.getNumHeavyAtoms()) {
       continue;
     }
@@ -446,8 +445,7 @@ bool isComplexQuery(const Atom &a) {
   if (descr == "AtomAtomicNum") return false;
   if (descr == "AtomOr" || descr == "AtomXor") return true;
   if (descr == "AtomAnd") {
-    auto childIt =
-        a.getQuery()->beginChildren();
+    auto childIt = a.getQuery()->beginChildren();
     int ncq = numComplexQueries(childIt, a.getQuery()->endChildren());
     if (ncq == 1) {
       return false;
@@ -583,8 +581,8 @@ VECT_INT_VECT getReactingAtoms(const ChemicalReaction &rxn,
 
   // find mapped atoms in the products :
   std::map<int, const Atom *> mappedProductAtoms;
-  for (auto rIt = rxn.beginProductTemplates();
-       rIt != rxn.endProductTemplates(); ++rIt) {
+  for (auto rIt = rxn.beginProductTemplates(); rIt != rxn.endProductTemplates();
+       ++rIt) {
     getMappedAtoms(*rIt, mappedProductAtoms);
   }
 
@@ -622,8 +620,8 @@ void ChemicalReaction::removeUnmappedReactantTemplates(
     double thresholdUnmappedAtoms, bool moveToAgentTemplates,
     MOL_SPTR_VECT *targetVector) {
   MOL_SPTR_VECT res_reactantTemplates;
-  for (auto iter = beginReactantTemplates();
-       iter != endReactantTemplates(); ++iter) {
+  for (auto iter = beginReactantTemplates(); iter != endReactantTemplates();
+       ++iter) {
     if (isReactionTemplateMoleculeAgent(*iter->get(), thresholdUnmappedAtoms)) {
       if (moveToAgentTemplates) {
         m_agentTemplates.push_back(*iter);
@@ -646,8 +644,8 @@ void ChemicalReaction::removeUnmappedProductTemplates(
     double thresholdUnmappedAtoms, bool moveToAgentTemplates,
     MOL_SPTR_VECT *targetVector) {
   MOL_SPTR_VECT res_productTemplates;
-  for (auto iter = beginProductTemplates();
-       iter != endProductTemplates(); ++iter) {
+  for (auto iter = beginProductTemplates(); iter != endProductTemplates();
+       ++iter) {
     if (isReactionTemplateMoleculeAgent(*iter->get(), thresholdUnmappedAtoms)) {
       if (moveToAgentTemplates) {
         m_agentTemplates.push_back(*iter);
@@ -668,8 +666,8 @@ void ChemicalReaction::removeUnmappedProductTemplates(
 
 void ChemicalReaction::removeAgentTemplates(MOL_SPTR_VECT *targetVector) {
   if (targetVector) {
-    for (auto iter = beginAgentTemplates();
-         iter != endAgentTemplates(); ++iter) {
+    for (auto iter = beginAgentTemplates(); iter != endAgentTemplates();
+         ++iter) {
       targetVector->push_back(*iter);
     }
   }

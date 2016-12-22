@@ -415,9 +415,8 @@ unsigned int SubstructMatch(const ROMol &mol, const ROMol &query,
          iter1 != pms.end(); ++iter1) {
       MatchVectType matchVect;
       matchVect.resize(nQueryAtoms);
-      for (const auto & iter2 : *iter1) {
-        matchVect[iter2.first] =
-            std::pair<int, int>(iter2.first, iter2.second);
+      for (const auto &iter2 : *iter1) {
+        matchVect[iter2.first] = std::pair<int, int>(iter2.first, iter2.second);
       }
       matches.push_back(matchVect);
     }
@@ -529,7 +528,7 @@ unsigned int RecursiveMatcher(const ROMol &mol, const ROMol &query,
         int rootIdx;
         query.getProp(common_properties::_queryRootAtom, rootIdx);
         bool found = false;
-        for (const auto & pairIter : *iter1) {
+        for (const auto &pairIter : *iter1) {
           if (pairIter.first == static_cast<unsigned int>(rootIdx)) {
             matches.push_back(pairIter.second);
             found = true;
@@ -570,9 +569,8 @@ void MatchSubqueries(const ROMol &mol, QueryAtom::QUERYATOM_QUERY *query,
       matchDone = true;
       const RecursiveStructureQuery *orsq =
           (const RecursiveStructureQuery *)subqueryMap[rsq->getSerialNumber()];
-      for (auto setIter =
-               orsq->beginSet();
-           setIter != orsq->endSet(); ++setIter) {
+      for (auto setIter = orsq->beginSet(); setIter != orsq->endSet();
+           ++setIter) {
         rsq->insert(*setIter);
       }
       // std::cerr<<" copying results for query serial number:
@@ -588,7 +586,7 @@ void MatchSubqueries(const ROMol &mol, QueryAtom::QUERYATOM_QUERY *query,
             RecursiveMatcher(mol, *queryMol, matchStarts, useChirality,
                              subqueryMap, useQueryQueryMatches, locked);
         if (res) {
-          for (int & matchStart : matchStarts) {
+          for (int &matchStart : matchStarts) {
             rsq->insert(matchStart);
           }
         }
@@ -631,8 +629,7 @@ bool isToBeAddedToVector(std::vector<MatchVectType> &matches,
   bool isToBeAdded = true;
   MatchVectType mCopy = m;
   std::sort(mCopy.begin(), mCopy.end(), matchCompare);
-  for (auto it = matches.end();
-       isToBeAdded && it != matches.begin();) {
+  for (auto it = matches.end(); isToBeAdded && it != matches.begin();) {
     --it;
     isToBeAdded = (it->size() != mCopy.size());
     if (!isToBeAdded) {

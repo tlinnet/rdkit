@@ -529,8 +529,7 @@ RWMol *PDBBlockToMol(const char *str, bool sanitize, bool removeHs,
   ConnectTheDots(mol);
   StandardPDBResidueBondOrders(mol);
 
-  for (auto & mi : amap)
-    mi.second->calcExplicitValence(false);
+  for (auto &mi : amap) mi.second->calcExplicitValence(false);
 
   if (sanitize) {
     if (removeHs) {

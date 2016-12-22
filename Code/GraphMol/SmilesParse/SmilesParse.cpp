@@ -155,8 +155,9 @@ RWMol *toMol(const std::string &inp,
         res->clearAtomBookmark(ci_RIGHTMOST_ATOM);
       }
       SmilesParseOps::CleanupAfterParsing(res);
-      molVect[0] = nullptr;  // NOTE: to avoid leaks on failures, this should occur
-                       // last in this if.
+      molVect[0] =
+          nullptr;  // NOTE: to avoid leaks on failures, this should occur
+                    // last in this if.
     }
   } catch (SmilesParseException &e) {
     std::string nm = "SMILES";
