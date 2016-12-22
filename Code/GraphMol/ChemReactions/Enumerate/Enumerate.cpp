@@ -86,8 +86,8 @@ void EnumerateLibraryBase::resetState() {
   m_enumerator.reset(m_initialEnumerator->copy());
 }
 
-std::vector<std::vector<std::string> > EnumerateLibraryBase::nextSmiles() {
-  std::vector<std::vector<std::string> > result;
+std::vector<std::vector<std::string>> EnumerateLibraryBase::nextSmiles() {
+  std::vector<std::vector<std::string>> result;
   std::vector<MOL_SPTR_VECT> mols = next();
   const bool doisomeric = true;
   result.resize(mols.size());
@@ -142,14 +142,13 @@ BBS removeNonmatchingReagents(const ChemicalReaction &rxn, BBS bbs,
         // see if we have any sane products in the results
         std::vector<MOL_SPTR_VECT> partialProducts =
             rxn.runReactant(mol, reactant_idx);
-        for (auto & partialProduct : partialProducts) {
+        for (auto &partialProduct : partialProducts) {
           int saneProducts = 0;
-          for (size_t product_idx = 0;
-               product_idx < partialProduct.size();
+          for (size_t product_idx = 0; product_idx < partialProduct.size();
                ++product_idx) {
             try {
-              RWMol *m = dynamic_cast<RWMol *>(
-                  partialProduct[product_idx].get());
+              RWMol *m =
+                  dynamic_cast<RWMol *>(partialProduct[product_idx].get());
               MolOps::sanitizeMol(*m);
               saneProducts++;
             } catch (...) {
@@ -234,7 +233,7 @@ boost::uint64_t computeNumProducts(const RGROUPS &sizes) {
 #ifdef RDK_HAVE_MULTIPREC
   boost::multiprecision::cpp_int myint = 1;
 
-  for (unsigned long size : sizes) {
+  for (boost::uint64_t size : sizes) {
     myint *= size;
   }
 
